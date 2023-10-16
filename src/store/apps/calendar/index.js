@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 
- const userRole = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userData')) : null;
+//  const userRole = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userData')) : null;
 
 
 
@@ -17,51 +17,6 @@ const AdminCalendarView = process.env.NEXT_PUBLIC_PHYSICIAN_SCHEDULING
 //Date for input
 const date = new Date()
 const input = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}`
-
-// fetch providers
-// const fetchProvider = async () => {
-//   await axios.post(ProviderCalendarView, {
-//   requestType:"Provider",
-//   accountId:"1"
-// }).then(res => {
-//   console.log(res, "res from fetchprovider")
-//   localStorage.setItem('provider', JSON.stringify(res.data.providersList))
-//   return res
-// })
-// }
-
-const fetchProvider = async () => {
-  try {
-    const res = await axios.post(ProviderCalendarView, {
-      requestType: "Provider",
-      accountId: "1"
-    });
-    console.log(res, "res from fetchprovider");
-    
-    // Use localStorage in a client-side context
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('provider', JSON.stringify(res.data.providersList));
-    }
-    
-    return res;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-// fetch Facility
-const fetchFacility = async () => {
-  await axios.post(ProviderCalendarView, {
-  requestType:"Facility",
-  accountId:"1"
-}).then(res => {
-  localStorage.setItem('facility', JSON.stringify(res.data.facilityList))
-
-  return res
-})
-}
-fetchFacility()
-fetchProvider()
 
 
 const facility = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('facility')) : null

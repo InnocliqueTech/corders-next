@@ -77,11 +77,10 @@ const AddEventSidebar = props => {
     drawerWidth,
     calendarApi,
     removeEvent,
-    handleSelectEvent,
+    selectEvent,
     addEventSidebarOpen,
     handleAddEventSidebarToggle,
     calendarsColor,
-    selectEvent,
     refetchEvents,
     fetchEvents
   } = props
@@ -106,7 +105,7 @@ const AddEventSidebar = props => {
     setValues(defaultState)
 
     // clearErrors()
-    //dispatch(handleSelectEvent(null))
+    //dispatch(selectEvent(null))
     handleAddEventSidebarToggle()
   }
 

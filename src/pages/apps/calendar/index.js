@@ -27,9 +27,6 @@ import {
   fetchEvents,
   deleteEvent,
   updateEvent,
-  handleSelectEvent,
-  handleAllCalendars,
-  handleCalendarsUpdate,
   selectEvent,
   removeEvent,
    updateFilter, updateAllFilterTitle, updateFiltertitle, updateAllFilters
@@ -148,9 +145,7 @@ const AppCalendar = () => {
         calendarApi={calendarApi}
         leftSidebarOpen={leftSidebarOpen}
         leftSidebarWidth={leftSidebarWidth}
-        handleSelectEvent={handleSelectEvent}
-        handleAllCalendars={handleAllCalendars}
-        handleCalendarsUpdate={handleCalendarsUpdate}
+        selectEvent={selectEvent}
         handleLeftSidebarToggle={handleLeftSidebarToggle}
         handleAddEventSidebarToggle={handleAddEventSidebarToggle}
         handleAddEventSidebar={handleAddEventSidebar}
@@ -181,7 +176,6 @@ const AppCalendar = () => {
           calendarsColor={calendarsColor}
           setCalendarApi={setCalendarApi}
           selectEvent={selectEvent}
-          handleSelectEvent={handleSelectEvent}
           handleLeftSidebarToggle={handleLeftSidebarToggle}
           handleAddEventSidebarToggle={handleAddEventSidebarToggle}
           setMonthChange={setMonthChange}
@@ -197,11 +191,10 @@ const AppCalendar = () => {
         open={addSidebarOpen}
         calendarApi={calendarApi}
         drawerWidth={addEventSidebarWidth}
-        handleSelectEvent={handleSelectEvent}
+        selectEvent={selectEvent}
         addEventSidebarOpen={addEventSidebarOpen}
         handleAddEventSidebarToggle={handleAddEventSidebarToggle}
         handleAddEventSidebar={handleAddEventSidebar}
-        selectEvent={selectEvent}
         refetchEvents={refetchEvents}
         calendarsColor={calendarsColor}
         fetchEvents = { fetchEvents }

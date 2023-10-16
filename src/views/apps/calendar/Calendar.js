@@ -62,6 +62,7 @@ import { width } from '@mui/system'
 
 
 //API calls
+const ProviderCalendarView = process.env.NEXT_PUBLIC_FETCH_EVENTS_PROVIDERS
 const LeaveStatusCheck = process.env.NEXT_PUBLIC_LEAVE_DETAILS
 const AdminManagement = process.env.NEXT_PUBLIC_PHYSICIAN_SCHEDULING
 
@@ -89,7 +90,6 @@ const Calendar = props => {
     calendarApi,
     calendarsColor,
     setCalendarApi,
-    handleSelectEvent,
     selectEvent,
     handleLeftSidebarToggle,
     handleAddEventSidebarToggle,
@@ -152,6 +152,33 @@ const Calendar = props => {
       setCalendarApi(calendarRef.current?.getApi())
     }
   }, [calendarApi, setCalendarApi])
+
+  const fetchProvider = async () => {
+    await axios.post(ProviderCalendarView, {
+    requestType:"Provider",
+    accountId:"1"
+  }).then(res => {
+    localStorage.setItem('provider', JSON.stringify(res.data.providersList))
+
+    return res
+  })
+  }
+  
+  // fetch Facility
+  const fetchFacility = async () => {
+    await axios.post(ProviderCalendarView, {
+    requestType:"Facility",
+    accountId:"1"
+  }).then(res => {
+    localStorage.setItem('facility', JSON.stringify(res.data.facilityList))
+
+    return res
+  })
+  }
+  useEffect(() => {
+    fetchFacility()
+    fetchProvider()
+  } , [])
 
   const handleClick = info => {
     if (
@@ -265,6 +292,7 @@ const Calendar = props => {
       : [],
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
     initialView: 'dayGridMonth',
+    style:{backgroundColor:'red !important'},
     headerToolbar: {
       start: 'sidebarToggle, prev, title, next',
       end: 'dayGridMonth,listMonth'
@@ -297,7 +325,7 @@ const Calendar = props => {
 
     // },
     eventClick({ event: clickedEvent }) {
-      dispatch(handleSelectEvent(clickedEvent))
+      dispatch(selectEvent(clickedEvent))
       handleAddEventSidebarToggle()
     },
     datesSet: handleMonthChange,

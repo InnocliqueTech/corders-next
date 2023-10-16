@@ -19,16 +19,9 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 const SidebarLeft = props => {
   const {
     store,
-    mdAbove,
     dispatch,
-    calendarApi,
     calendarsColor,
-    leftSidebarOpen,
-    leftSidebarWidth,
-    handleSelectEvent,
-    handleAllCalendars,
-    handleCalendarsUpdate,
-    handleLeftSidebarToggle,
+    selectEvent,
     handleAddEventSidebarToggle
   } = props
   const colorsArr = calendarsColor ? Object.entries(calendarsColor) : []
@@ -54,7 +47,7 @@ const SidebarLeft = props => {
 
   const handleSidebarToggleSidebar = () => {
     handleAddEventSidebarToggle()
-    dispatch(handleSelectEvent(null))
+    dispatch(selectEvent(null))
   }
   
   // if (renderFilters) {
