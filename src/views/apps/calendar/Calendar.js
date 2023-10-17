@@ -312,11 +312,8 @@ const Calendar = props => {
     height: 1100,
     eventClassNames({ event: calendarEvent }) {
       // @ts-ignore
-      console.log(typeof calendarEvent)
       const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar]
-     console.log(colorName)
-     console.log(calendarEvent)
-
+  
       return [
         // Background Color
         `bg-${colorName}`

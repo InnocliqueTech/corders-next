@@ -145,14 +145,6 @@ const AddEventSidebar = props => {
     calendarApi.getEventById(eventId).remove()
   }
 
-  const handleDeleteEvent = () => {
-    dispatch(removeEvent(selectedEvent.id))
-    removeEventInCalendar(selectedEvent.id)
-    handleAddEventSidebarToggle()
-
-    //toast.error('Event Removed')
-  }
-
   const handleStartDate = date => {
     if (date > values.endDate) {
       setValues({ ...values, startDate: new Date(date), endDate: new Date(date) })
@@ -609,6 +601,7 @@ const AddEventSidebar = props => {
         },
         data: JSON.stringify({
           requestType: "editScheduling",
+          inputType:"Update",
           date: moment(event.Date).format("YYYY-MM-DD"),
           providerId: event.providerId,
           newHospitalId: event.extendedProps.newHospitalId,
@@ -627,6 +620,45 @@ const AddEventSidebar = props => {
   }
 
 
+  const handleDeleteEvent = async () => {
+    if (getValues('title').label.length) {
+      const event = {
+        providerId: getValues('title').hasOwnProperty('id') === false ? providerData.find(x => x.label === selectedEvent.title.split(' : ')[1]).id : getValues('title').id,
+        previousHospitalId: facilityData.find(x => x.label === selectedEvent.extendedProps.calendar).id,
+        Date: startPicker,
+        extendedProps: {
+          newHospitalId: calendarLabel.id === undefined ? facilityData.find(x => x.label === selectedEvent.extendedProps.calendar).id : calendarLabel.id
+        }
+      }
+      await axios({
+        method: "POST",
+        url: ScheduleApi,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data: JSON.stringify({
+          requestType: "editScheduling",
+          inputType:"Delete",
+          date: moment(event.Date).format("YYYY-MM-DD"),
+          providerId: event.providerId,
+          newHospitalId: event.extendedProps.newHospitalId,
+          previousHospitalId: event.previousHospitalId
+        })
+      })
+      handleAddEventSidebarToggle()
+      dispatch(fetchEvents(store.selectedCalendars))
+      toast.success('Event Deleted')
+      removeEventInCalendar(selectedEvent.id)
+      } else {
+      setError('title', {
+        type: 'manual'
+      })
+    }
+    //toast.error('Event Removed')
+  }
+
+
+
   useEffect(() => {
     // This code will run when the component mounts
     // handleSelectedEvent();
@@ -642,11 +674,10 @@ const AddEventSidebar = props => {
 
   const EventActions = () => {
     const isProviderUnassigned = getValues('title').label === 'Unassigned'
-
+    
     // Check if an event is selected and the provider was initially "Unassigned"
     const shouldHideUpdateButton = isObjEmpty(selectedEvent) && isProviderUnassigned
-
-
+      
     if (isObjEmpty(selectedEvent) || (!isObjEmpty(selectedEvent) && !selectedEvent.title.length)) {
       return (
         <Fragment>
@@ -676,15 +707,18 @@ const AddEventSidebar = props => {
             <Button variant="contained" color='primary' onClick={handleEditEvent}> Update </Button>
             :
             <Button disabled> Update </Button> : null}
-
-          <Button variant="outlined" color="error" onClick={handleDeleteEvent}>
-            Cancel
+ {calendarLabel.id === undefined &&  getValues().id === undefined
+            ?
+            <Button variant="outlined" color="error" onClick={handleDeleteEvent}>
+            Remove
           </Button>
+            :
+            <Button disabled> Remove </Button>}
         </Fragment>
+
       )
     }
   }
-
 
   return (
     <Modal
