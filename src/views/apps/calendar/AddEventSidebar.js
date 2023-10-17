@@ -654,7 +654,6 @@ const AddEventSidebar = props => {
         type: 'manual'
       })
     }
-    //toast.error('Event Removed')
   }
 
 
