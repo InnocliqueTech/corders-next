@@ -31,4 +31,13 @@ code[class*='language-'] {
   height: 34px;
   color: black;
 }
+.fc-direction-ltr {
+  direction: ltr;
+  text-align: left;
+}
+.fc {
+  display: flex;
+  flex-direction: column;
+  font-size: 1em;
+}
 
