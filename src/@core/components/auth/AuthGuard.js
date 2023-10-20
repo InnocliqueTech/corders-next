@@ -17,18 +17,7 @@ const AuthGuard = props => {
       if (!router.isReady) {
         return
       }
-      if (router.asPath !== '/apps/calendar/') {
-        localStorage.removeItem('refresh')
-      } 
-      if (router.asPath === '/apps/calendar/') {
-        const refresh = window.localStorage.getItem('refresh')
-        if (refresh === null) {
-          setTimeout(() => {
-          window.location.reload()    
-          window.localStorage.setItem('refresh', "1")  
-          }, 1000) 
-        }
-      }
+ 
       if (auth.user === null && !window.localStorage.getItem('userData')) {
         if (router.asPath !== '/') {
           router.replace({

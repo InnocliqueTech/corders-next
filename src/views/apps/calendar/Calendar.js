@@ -255,16 +255,6 @@ const Calendar = props => {
 
   }
 
-  useEffect(() => {
-    const refresh = window.localStorage.getItem('refresh')
-    if (refresh === null) {
-      setTimeout(() => {
-        window.location.reload()
-        window.localStorage.setItem('refresh', '1')
-      }, 1000)
-    }
-  }, [])
-
 
   
 
@@ -1453,17 +1443,6 @@ export default Calendar
     //   setCurrentMonth(true)
     // }
 
-
-  // useEffect(() => {
-  //   const refresh = window.localStorage.getItem('refresh');
-  
-  //   if (refresh !== '1') {
-  //     window.localStorage.setItem('refresh', '1');
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 1000);
-  //   }
-  // }, []);
 
 
   // const [active, setActive] = useState("1");
