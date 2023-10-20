@@ -107,6 +107,7 @@ const App = props => {
           <meta name='description' content={`${themeConfig.templateName} – Business Intelligence`} />
           <meta name='keywords' content='Corders - Business Intelligence' />
           <meta name='viewport' content='initial-scale=1, width=device-width' />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" />
         </Head>
 
         <AuthProvider>
