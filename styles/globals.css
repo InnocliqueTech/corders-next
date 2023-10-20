@@ -31,4 +31,8 @@ code[class*='language-'] {
   height: 34px;
   color: black;
 }
+ 
+.fc-button-group{
+float: right;
+}
 
