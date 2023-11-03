@@ -236,7 +236,7 @@ const Calendar = props => {
           ? `${date.getFullYear() - 1}-12`
           : `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`
       )
-      
+
       const res = await axios.post(AdminManagement, {
         requestType: 'CheckScheduledForMonth',
         fromDateOfPreviousMonth: `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`.includes('00')
@@ -1296,7 +1296,7 @@ console.log(nextMonth)
                 </div>
               </Box>
             </Modal>
-                  {isOneClickScheduleDisabled() === false ? nextMonth === true ? <Button color='primary' size='sm' variant='contained' >One Click Schedule</Button> : <Button size='sm' disabled variant='contained' >One Click Schedule</Button> : null}
+                  {isOneClickScheduleDisabled() === false ? nextMonth === true ? <Button color='warning' size='sm' variant='contained' >One Click Schedule</Button> : <Button size='sm' disabled variant='contained' >One Click Schedule</Button> : null}
           </div>
           <FullCalendar {...calendarOptions} />
         </div>
