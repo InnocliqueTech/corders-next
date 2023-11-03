@@ -1296,7 +1296,7 @@ console.log(nextMonth)
                 </div>
               </Box>
             </Modal>
-                  {isOneClickScheduleDisabled() === false ? nextMonth === true ? <Button color='warning' size='sm' variant='contained' >One Click Schedule</Button> : <Button size='sm' disabled variant='contained' >One Click Schedule</Button> : null}
+                  {isOneClickScheduleDisabled() === false ? nextMonth === true ? <Button color='warning' size='sm' onClick={handleOneClickSchedule} variant='contained' >One Click Schedule</Button> : <Button size='sm' disabled variant='contained' >One Click Schedule</Button> : null}
           </div>
           <FullCalendar {...calendarOptions} />
         </div>
