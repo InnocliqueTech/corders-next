@@ -303,6 +303,7 @@ const Calendar = props => {
       : [],
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
     initialView: 'dayGridMonth',
+    timeZone:'false',
     style:{backgroundColor:'red !important'},
     headerToolbar: {
       start: 'sidebarToggle, prev, title, next',
