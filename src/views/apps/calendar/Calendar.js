@@ -236,6 +236,21 @@ const Calendar = props => {
           ? `${date.getFullYear() - 1}-12`
           : `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`
       )
+      
+      const res = await axios.post(AdminManagement, {
+        requestType: 'CheckScheduledForMonth',
+        fromDateOfPreviousMonth: `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`.includes('00')
+        ? `${date.getFullYear() - 1}-12-01`
+        : `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}-01`,
+        toDateOfPreviousMonth: `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`.includes('00')
+        ? `${date.getFullYear() - 1}-12-30`
+        : `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}-30`
+      })
+      if (res.data.scheduleResponse.status === null) {
+        setNextMonth(true)
+      } else {
+        setNextMonth(false)
+      }
     } else {
       localStorage.setItem(
         'monthChange',
@@ -243,22 +258,24 @@ const Calendar = props => {
       )
       setMonthChange(`${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`)
       setMonth(`${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`)
+
+      const res = await axios.post(AdminManagement, {
+        requestType: 'CheckScheduledForMonth',
+        fromDateOfPreviousMonth: `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-01`,
+        toDateOfPreviousMonth: `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-30`
+      })
+      console.log(res)
+      if (res.data.scheduleResponse.status === null) {
+        setNextMonth(true)
+      } else {
+        setNextMonth(false)
+      }
     }
     setSelectedPreviousMonth(`${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0') - 1}`)
     setSelectedMonth(`${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`.includes('00')
     ? `${date.getFullYear() - 1}-12`
     : `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`)
 
-    const res = await axios.post(AdminManagement, {
-      requestType: 'CheckScheduledForMonth',
-      fromDateOfPreviousMonth: `${selectedMonth}-01`,
-      toDateOfPreviousMonth: `${selectedMonth}-30`
-    })
-    if (res.data.scheduleResponse.status === null) {
-      setNextMonth(true)
-    } else {
-      setNextMonth(false)
-    }
   }
   
 
@@ -351,33 +368,8 @@ const Calendar = props => {
     }
   }
 
-  const BtnStyle1 = () => {
-    return {
-      padding: '8px',
-      fontsize: '14px',
-      textAlign: 'center',
-      margin: '10px',
-      backgroundColor: '#ff9f43',
-      border: 'none',
-      color: 'white',
-      borderRadius: '4px',
-      cursor: 'pointer'
-    }
-  }
 
-  const BtnStyle3 = () => {
-    return {
-      padding: '8px',
-      fontsize: '14px',
-      textAlign: 'center',
-      margin: '10px',
-      backgroundColor: '#6c757d',
-      border: 'none',
-      color: 'white',
-      borderRadius: '4px',
-      cursor: 'pointer'
-    }
-  }
+
 
   const getTextColorStyle = (value, color) => {
 
@@ -393,19 +385,6 @@ const Calendar = props => {
     }
   }
 
-  const Success = () => {
-    return {
-      display: 'flex',
-      justifyContent: 'center',
-      fontSize: '70px',
-      backgroundColor: 'transparent',
-      color: 'green',
-      borderRadius: '100%',
-      margin: 'auto',
-      width: '70px',
-      border: '1px solid #c9dae1'
-    }
-  }
 
   const info = () => {
     return {
@@ -421,19 +400,6 @@ const Calendar = props => {
     }
   }
 
-  const xicon = () => {
-    return {
-      display: 'flex',
-      justifyContent: 'center',
-      fontSize: '70px',
-      backgroundColor: 'transparent',
-      color: 'red',
-      borderRadius: '100%',
-      margin: 'auto',
-      width: '70px',
-      border: '2px solid red'
-    }
-  }
 
   const scroolHide = () => {
     return {
@@ -457,19 +423,6 @@ const Calendar = props => {
       width: '70px',
       border: '2px solid #c9dae1'
     }
-  }
-
-  //-----------One click achedule---------------------------------------
-  const handleDialogOpen = () => {
-    setOpenDialog(true)
-  }
-
-  const handleCloseOneClickScheduleModal = () => {
-    setOneClickScheduleModalOpen(false)
-  }
-
-  const handleDialogClose = () => {
-    setOpenDialog(false)
   }
 
 
@@ -519,6 +472,8 @@ const Calendar = props => {
               title: 'Scheduling Successfully Done',
               text: 'Scheduling has been successfully completed.'
             })
+      window.location.reload()
+
           } else {
             MySwal.fire({
               icon: 'error',
@@ -531,19 +486,6 @@ const Calendar = props => {
     } catch (error) {
       console.error('Error:', error)
     }
-  }
-
-  //one click schedule disabled
-  const handleModalOpen = (icon, title, subTitle, message) => {
-    setModalICon(icon)
-    setModalTitle(title)
-    setSubTitle(subTitle)
-    setModalMessage(message)
-    setOpenModal(true)
-  }
-
-  const handleModalClose = () => {
-    setOpenModal(false)
   }
 
   const isOneClickScheduleDisabled = () => {
@@ -612,20 +554,10 @@ const Calendar = props => {
   }
 
   //------------Leave------------------
-  const [formModalOpen, setFormModalOpen] = useState(false)
 
   const [halfDay, setHalfDay] = useState(0)
   const [picker, setPicker] = useState([])
   const [leaves, setLeaves] = useState([])
-
-  const toggle = tab => {
-    setActive(tab)
-  }
-
-  const handleDateChange = e => {
-    setSelectedDate(e.target.value)
-  }
-
 
   const handleSelection = dates => {
     axios
@@ -691,11 +623,6 @@ const Calendar = props => {
     }, 1000)
 
     //fetchLeaveDetails()
-  }
-
-  const removeElement = index => {
-    const newDates = picker.filter((_, i) => i !== index)
-    setPicker(newDates)
   }
 
   const fetchLeaveDetails = async () => {
@@ -981,7 +908,7 @@ const Calendar = props => {
   const handleButtonClick = (value) => {
     setActive(value);
   };
-
+console.log(nextMonth)
   const monthNameAndYear = getCurrentMonthNameAndYear()
 
   if (store) {
@@ -1369,24 +1296,7 @@ const Calendar = props => {
                 </div>
               </Box>
             </Modal>
-            {isOneClickScheduleDisabled() === false ? ( nextMonth === true ? <Button
-                color='warning'
-                className='justify-content-center me-2'
-                size='sm'
-                style={BtnStyle1()}
-                onClick={handleOneClickSchedule}
-              >
-                One Click Schedule
-              </Button> : <Button
-  color='secondary'
-  className='justify-content-center me-2'
-  size='sm'
-  style={BtnStyle3()}
-  onClick={handleOneClickSchedule}
-  disabled // Set the disabled attribute to true to disable the button
->
-  One Click Schedule
-</Button>) : null}
+                  {isOneClickScheduleDisabled() === false ? nextMonth === true ? <Button color='primary' size='sm' variant='contained' >One Click Schedule</Button> : <Button size='sm' disabled variant='contained' >One Click Schedule</Button> : null}
           </div>
           <FullCalendar {...calendarOptions} />
         </div>
