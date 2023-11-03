@@ -13,11 +13,11 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
     icon: 'tabler:users',
     path: '/apps/schedule'
   },
-  {
-    title: 'Documents',
-    icon: 'tabler:table',
-    path: '/storage/documents'
-  }
+  // {
+  //   title: 'Documents',
+  //   icon: 'tabler:table',
+  //   path: '/storage/documents'
+  // }
 ]
 } else if (userData && data.includes('Scheduling _access') && data.includes('Provider')) {
   return [   {
@@ -30,11 +30,12 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
     icon: 'tabler:users',
     path: '/apps/schedule'
   },
-  {
-    title: 'Documents',
-    icon: 'tabler:table',
-    path: '/storage/documents'
-  }]
+  // {
+  //   title: 'Documents',
+  //   icon: 'tabler:table',
+  //   path: '/storage/documents'
+  // }
+]
 } else if (userData && data.includes('Scheduling _access') && data.includes('Provider') && data.includes('Advanced_search')) {
   return [   {
     title: 'Calendar',
@@ -46,11 +47,12 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
     icon: 'tabler:users',
     path: '/apps/schedule'
   },
-  {
-    title: 'Documents',
-    icon: 'tabler:table',
-    path: '/storage/documents'
-  }]
+  // {
+  //   title: 'Documents',
+  //   icon: 'tabler:table',
+  //   path: '/storage/documents'
+  // }
+]
 }  else if (userData && data.includes('Provider') && data.includes('Dashboard') && data.includes('Advanced_search')) {
   return [   {
     title: 'Calendar',
@@ -62,11 +64,12 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
       icon: 'tabler:eye',
       path: '/apps/ui_leave'
   },
-  {
-    title: 'Documents',
-    icon: 'tabler:table',
-    path: '/storage/documents'
-  }]
+  // {
+  //   title: 'Documents',
+  //   icon: 'tabler:table',
+  //   path: '/storage/documents'
+  // }
+]
 } else if (userData && data.includes('Provider') && data.includes('Dashboard')) {
   return [   {
     title: 'Calendar',
@@ -78,11 +81,12 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
       icon: 'tabler:eye',
       path: '/apps/ui_leave'
   },
-  {
-    title: 'Documents',
-    icon: 'tabler:table',
-    path: '/storage/documents'
-  }]
+  // {
+  //   title: 'Documents',
+  //   icon: 'tabler:table',
+  //   path: '/storage/documents'
+  // }
+]
 } else if (userData && data.includes('Provider')) {
   return [   {
     title: 'Calendar',
@@ -94,18 +98,20 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
       icon: 'tabler:eye',
       path: '/apps/ui_leave'
   },
-  {
-    title: 'Documents',
-    icon: 'tabler:table',
-    path: '/storage/documents'
-  }]
+  // {
+  //   title: 'Documents',
+  //   icon: 'tabler:table',
+  //   path: '/storage/documents'
+  // }
+]
 } else {
   return [  
-  {
-    title: 'Documents',
-    icon: 'tabler:table',
-    path: '/storage/documents'
-  }]
+  // {
+  //   title: 'Documents',
+  //   icon: 'tabler:table',
+  //   path: '/storage/documents'
+  // }
+]
 }
 }
 
