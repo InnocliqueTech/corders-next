@@ -13,6 +13,7 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
     icon: 'tabler:users',
     path: '/apps/schedule'
   },
+  
   // {
   //   title: 'Documents',
   //   icon: 'tabler:table',
@@ -30,6 +31,7 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
     icon: 'tabler:users',
     path: '/apps/schedule'
   },
+
   // {
   //   title: 'Documents',
   //   icon: 'tabler:table',
@@ -47,6 +49,7 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
     icon: 'tabler:users',
     path: '/apps/schedule'
   },
+
   // {
   //   title: 'Documents',
   //   icon: 'tabler:table',
@@ -64,6 +67,7 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
       icon: 'tabler:eye',
       path: '/apps/ui_leave'
   },
+
   // {
   //   title: 'Documents',
   //   icon: 'tabler:table',
@@ -81,6 +85,7 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
       icon: 'tabler:eye',
       path: '/apps/ui_leave'
   },
+
   // {
   //   title: 'Documents',
   //   icon: 'tabler:table',
@@ -98,6 +103,7 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
       icon: 'tabler:eye',
       path: '/apps/ui_leave'
   },
+
   // {
   //   title: 'Documents',
   //   icon: 'tabler:table',
@@ -106,6 +112,7 @@ if (userData && data.includes('Scheduling _access') && userData && data.includes
 ]
 } else {
   return [  
+
   // {
   //   title: 'Documents',
   //   icon: 'tabler:table',

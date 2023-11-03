@@ -135,7 +135,6 @@ const Calendar = props => {
   const userRole = JSON.parse(localStorage.getItem('userData'))
   const [openModal, setOpenModal] = useState(false)
   const [nextMonth, setNextMonth] = useState(false)
-  // State for the modal
   const [modalIcon, setModalICon] = useState('')
   const [modalTitle, setModalTitle] = useState('')
   const [modalMessage, setModalMessage] = useState('')
@@ -249,6 +248,7 @@ const Calendar = props => {
     setSelectedMonth(`${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`.includes('00')
     ? `${date.getFullYear() - 1}-12`
     : `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`)
+
     const res = await axios.post(AdminManagement, {
       requestType: 'CheckScheduledForMonth',
       fromDateOfPreviousMonth: `${selectedMonth}-01`,
@@ -378,7 +378,9 @@ const Calendar = props => {
       cursor: 'pointer'
     }
   }
+
   const getTextColorStyle = (value, color) => {
+
     return {
       color,
       borderRight: '1px solid #A9A9A9', // Vertical line separator
