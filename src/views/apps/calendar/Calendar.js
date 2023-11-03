@@ -271,7 +271,9 @@ const Calendar = props => {
         setNextMonth(false)
       }
     }
-    setSelectedPreviousMonth(`${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0') - 1}`)
+    setSelectedPreviousMonth(`${date.getFullYear()}-${(date.getMonth()).toString().padStart(2, '0')}`.includes('00') || `${date.getFullYear()}-${(date.getMonth()).toString().padStart(2, '0')}`.includes('01')
+    ? `${date.getFullYear() - 1}-${(date.getMonth()+11).toString().padStart(2, '0')}`
+    : `${date.getFullYear()}-${(date.getMonth()-1).toString().padStart(2, '0')}`)
     setSelectedMonth(`${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`.includes('00')
     ? `${date.getFullYear() - 1}-12`
     : `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`)
