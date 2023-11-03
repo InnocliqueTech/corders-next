@@ -42,6 +42,7 @@ import Icon from 'src/@core/components/icon'
 import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
 import { useForm, Controller } from 'react-hook-form'
+import { date } from 'yup'
 
 const MailLog = props => {
   // ** Props
@@ -83,11 +84,11 @@ const MailLog = props => {
   const [providerData, setProviderData] = useState([])
   const [providerOptions, setProviderOptions] = useState([])
   const [selectedProviderId, setselectedProviderId] = useState(null)
-  const [providerDataModel, setProviderDataModal] = useState([])
-  const [hospitalDataModal, setHospitalDataModal] = useState([])
+  const [providerDataModel, setProviderDataModal] = useState(null)
+  const [hospitalDataModal, setHospitalDataModal] = useState(null)
   const [selectedUserId, setSelectedUserId] = useState(null)
 
-  const [hospitalData, setHospitalData] = useState([])
+  const [hospitalData, setHospitalData] = useState(null)
   const [hospitalOptios, setHospitalOptions] = useState([])
   const [selectedHospitalId, setSelectedHospitalId] = useState(null)
   const [isSearched, setIsSearched] = useState(false)
@@ -101,6 +102,21 @@ const MailLog = props => {
   const [leaveApprovalModal, setLeaveApprovalModal] = useState('')
   const [searchButtonClicked, setSearchButtonClicked] = useState(false)
   const [isScheduleButtonEnabled, setIsScheduleButtonEnabled] = useState(false)
+  const [showProgress, setShowProgress] = useState(false)
+
+  const [isClicked, setIsClicked] = useState(false)
+
+  const handleIconClick = () => {
+    setIsClicked(true)
+    //onClear()
+    setTimeout(() => {
+      setIsClicked(false)
+    }, 1000)
+    setShowProgress(true)
+    setTimeout(() => {
+      setShowProgress(false)
+    }, 1000)
+  }
 
   const userRole = JSON.parse(localStorage.getItem('userData'))
 
@@ -123,7 +139,6 @@ const MailLog = props => {
     } else {
       setShowScheduleButton(false) // Hide the Schedule button when collapsing
     }
-
   }
 
   const hideToClick = () => {
@@ -147,6 +162,17 @@ const MailLog = props => {
     bgcolor: 'background.paper',
     boxShadow: 20,
     borderRadius: '5px'
+  }
+
+  const onClear = () => {
+    setProviderData([])
+    setHospitalData(null)
+    setStartDate(null)
+    setEndDate(null)
+    setLeaves(false)
+    setSearchData('')
+    setLeaveData('')
+    setIsSearched(false)
   }
 
   //api for Provider
@@ -284,7 +310,6 @@ const MailLog = props => {
         setSearchData(resp.data.providerLeavesView)
       }
     } catch (err) {
-
       setIsSearched(true)
       setLoading(false)
       console.error(err)
@@ -479,13 +504,12 @@ const MailLog = props => {
             overflowX: 'visible',
             backgroundColor: '#ffffff',
             width: isExpand ? '100%' : '100%',
-
             // height: isExpand ? '20%' : 'auto',
             height: isExpand ? '20%' : searchButtonClicked ? 'auto' : '70%',
             padding: '16px',
-            
             //overflowY: isExpand ? '' : 'scroll'
-            overflowY: searchButtonClicked ? 'scroll' : ''
+            overflowY: searchButtonClicked ? 'scroll' : '',
+            backgroundColor: isClicked ? '#b1b3b1' : '#ffffff'
           }}
         >
           <div>
@@ -503,11 +527,23 @@ const MailLog = props => {
                   <Icon icon='tabler:chevron-down' fontSize={18} />
                 </div>
                 <div style={{ marginTop: '12px', marginLeft: '18px', cursor: 'pointer' }}>
-                  <Icon icon='tabler:refresh' fontSize={18} />
+                  <Icon icon='tabler:refresh' fontSize={18} onClick={handleIconClick} />
                 </div>
                 <div style={{ marginTop: '12px', marginLeft: '18px', cursor: 'pointer' }}>
                   <Icon icon='tabler:x' fontSize={18} onClick={hideToClick} />
                 </div>
+                {showProgress && (
+                  <div
+                    style={{
+                      position: 'fixed',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                  >
+                    <CircularProgress />
+                  </div>
+                )}
               </div>
             </div>
             {showScheduleButton && (
@@ -641,7 +677,6 @@ const MailLog = props => {
                             <button onClick={increaseMonth}>{'>'}</button>
                           </div>
                         )}
-
                         //minDate={today}
                         minDate={startDateModal}
                       />
@@ -788,14 +823,17 @@ const MailLog = props => {
                   >
                     Search
                   </Button>
-                  <Button size='small' style={{ marginLeft: '20px', backgroundColor: '#82868B', color: 'white' }}>
+                  <Button
+                    size='small'
+                    style={{ marginLeft: '20px', backgroundColor: '#82868B', color: 'white' }}
+                    onClick={onClear}
+                  >
                     Cancel
                   </Button>
                 </Grid>
                 <Grid
                   container
                   rowSpacing={6}
-
                   //columnSpacing={{ xs: 3, sm: 5, md: 6 }}
                   style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                 >
@@ -982,7 +1020,6 @@ const MailLog = props => {
                                                 ) : item.leaveDescription === 'Leave Approved' ? (
                                                   <Button
                                                     size='small'
-
                                                     //color='warning'
                                                     style={{ backgroundColor: '#FF9F43', color: '#ffffff' }}
                                                     onClick={() => {
@@ -1008,7 +1045,6 @@ const MailLog = props => {
                                               padding: '0.24rem',
                                               backgroundColor: new Date(i.date) > new Date() ? '#7367F0' : '#808080'
                                             }}
-
                                             // className={`miui-schedule-badge ${
                                             //   new Date(i.date) > new Date() ? ' bg-primary' : 'miui-secondary'
                                             // }`}
