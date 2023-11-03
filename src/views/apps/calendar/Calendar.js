@@ -134,7 +134,7 @@ const Calendar = props => {
   const [halfDayLeave, setHalfDayLeave] = useState(false)
   const userRole = JSON.parse(localStorage.getItem('userData'))
   const [openModal, setOpenModal] = useState(false)
-
+  const [nextMonth, setNextMonth] = useState(false)
   // State for the modal
   const [modalIcon, setModalICon] = useState('')
   const [modalTitle, setModalTitle] = useState('')
@@ -145,8 +145,6 @@ const Calendar = props => {
   const [datePicker, setDatePicker] = useState('')
   const [divVisible, setDivVisible] = useState(true)
 
-  // You should set the selectedPreviousMonth as needed
-  console.log(month, 'month')
   useEffect(() => {
     if (calendarApi === null) {
       setCalendarApi(calendarRef.current?.getApi())
@@ -219,12 +217,9 @@ const Calendar = props => {
     }
   }
 
-  const handleMonthChange = payload => {
-    console.log(payload, 'payload')
+  const handleMonthChange = async (payload) => {
     const today = new Date()
     const date = new Date(payload.endStr)
-    console.log(today.getMonth() + 1)
-    console.log(date.getMonth())
     if (today.getMonth() + 1 !== date.getMonth()) {
       localStorage.setItem(
         'monthChange',
@@ -251,11 +246,20 @@ const Calendar = props => {
       setMonth(`${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`)
     }
     setSelectedPreviousMonth(`${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0') - 1}`)
-    setSelectedMonth(`${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`)
-
+    setSelectedMonth(`${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`.includes('00')
+    ? `${date.getFullYear() - 1}-12`
+    : `${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}`)
+    const res = await axios.post(AdminManagement, {
+      requestType: 'CheckScheduledForMonth',
+      fromDateOfPreviousMonth: `${selectedMonth}-01`,
+      toDateOfPreviousMonth: `${selectedMonth}-30`
+    })
+    if (res.data.scheduleResponse.status === null) {
+      setNextMonth(true)
+    } else {
+      setNextMonth(false)
+    }
   }
-
-
   
 
   const newArr = store.events.map(obj => {
@@ -321,7 +325,6 @@ const Calendar = props => {
 
     },
     dateClick(info) {
-      console.log(info)
       handleClick(info)
     },
     eventDrop({ event: droppedEvent }) {
@@ -362,6 +365,19 @@ const Calendar = props => {
     }
   }
 
+  const BtnStyle3 = () => {
+    return {
+      padding: '8px',
+      fontsize: '14px',
+      textAlign: 'center',
+      margin: '10px',
+      backgroundColor: '#6c757d',
+      border: 'none',
+      color: 'white',
+      borderRadius: '4px',
+      cursor: 'pointer'
+    }
+  }
   const getTextColorStyle = (value, color) => {
     return {
       color,
@@ -453,6 +469,7 @@ const Calendar = props => {
   const handleDialogClose = () => {
     setOpenDialog(false)
   }
+
 
   const handleOneClickSchedule = async () => {
     try {
@@ -564,14 +581,12 @@ const Calendar = props => {
 
     // Format the date as "YYYY-MM"
     const formattedDate = `${year}-${month.toString().padStart(2, '0')}`
-    console.log(formattedDate, 'formattedDate')
     axios
       .post(AdminManagement, {
         requestType: 'ProviderWorkingDaysInMonth',
         date: selectedMonth === undefined ? formattedDate : selectedMonth
       })
       .then(response => {
-        console.log(response, 'response from metric data')
 
         // setResponseData(response.data)
         setResponseData({ data: response.data, loading: false })
@@ -624,7 +639,6 @@ const Calendar = props => {
           res.data.leaveStatusCheckResponse.leaveStatusCheck.status === 2
         ) {
           setPicker(dates)
-          console.log(setPicker(dates), 'setPicker(dates)')
         } else {
           setNestedModal(true)
         }
@@ -689,13 +703,11 @@ const Calendar = props => {
         providerId: userRole.userId
       })
       .then(res => {
-        console.log(res, 'res for leaves')
         const data = []
         res.data.fetchLeaveResponse.fetchLeaveDetails.map(dat => {
           if (dat.status === 0) {
             data.push(dat.dates)
           }
-          console.log(data, 'data')
           setLeaves(data)
         })
       })
@@ -773,13 +785,11 @@ const Calendar = props => {
   }
 
   // set Half day
-  const onChange = e => {
-    if (e.target.checked) {
-      setHalfDay('0')
-    } else {
-      setHalfDay('1')
-    }
-  }
+  const onChange = (e) => {
+    // Toggle between 0 and 1
+    const newHalfDay = halfDay === 0 ? 1 : 0;
+    setHalfDay(newHalfDay);
+  };
 
   const handleLeaveOpenDialog = () => {
     setLeaveDialogOPen(true)
@@ -966,7 +976,9 @@ const Calendar = props => {
     )
   }
 
-  console.log(leaves, 'leaves')
+  const handleButtonClick = (value) => {
+    setActive(value);
+  };
 
   const monthNameAndYear = getCurrentMonthNameAndYear()
 
@@ -989,11 +1001,32 @@ const Calendar = props => {
               // fullWidth
               // maxWidth="sm"
             >
-              <DialogTitle>
-                <Tabs value={active} onChange={(_, newValue) => setActive(newValue)} centered>
+           <DialogTitle>
+                {/* <Tabs value={active} onChange={(_, newValue) => setActive(newValue)} centered>
                   <Tab label='Apply Leave' value='1' />
                   <Tab label='Cancel Leave' value='2' />
-                </Tabs>
+                </Tabs> */}
+                <div style={{ display: "flex", justifyContent: "center", gap: "5px" }}>
+                  <Button
+                    variant={active === '1' ? 'contained' : 'text'}
+                    color="primary"
+                    onClick={() => handleButtonClick('1')}
+                    style={{ color: active === '1' ? 'white' : 'gray' }}
+
+                  >
+                    Apply Leave
+                  </Button>
+                  <Button
+                    variant={active === '2' ? 'contained' : 'text'}
+                    color="primary"
+                    onClick={() => handleButtonClick('2')}
+                    style={{ color: active === '2' ? 'white' : 'gray' }}
+
+                  >
+                    Cancel Leave
+                  </Button>
+                  {/* Your content for the active tab goes here */}
+                </div>
               </DialogTitle>
               <DialogContent>
                 {active === '1' && (
@@ -1023,8 +1056,8 @@ const Calendar = props => {
                         </DatePicker>
                       </Grid>
                       <Grid item sm={12}>
-                        <FormControlLabel
-                          control={<Switch checked={halfDay} onChange={onChange} name='customSwitch' color='primary' />}
+                      <FormControlLabel
+                          control={<Switch checked={halfDay === 1} onChange={onChange} name='customSwitch' color='primary' />}
                           label='Half Day'
                         />
                       </Grid>
@@ -1183,15 +1216,15 @@ const Calendar = props => {
             >
               <Box className='container'>
                 <div style={{ display: 'flex', float: 'right', padding: '3px' }}>
-                  <button type='button' className='close' onClick={handleCloseMetricsModal}>
+                  <button type='button' className='close' onClick={handleCloseMetricsModal} style={{ cursor: "pointer" }}>
                     &times;
                   </button>
                 </div>
                 <div className='container'>
                   <TableContainer component={Paper} style={{ maxHeight: '100vh', overflowY: 'auto' }}>
-                    <Table>
+                    <Table aria-label="simple table">
                       <TableHead>
-                        <TableRow>
+                        <TableRow style={{ backgroundColor: "#f3f2f7" }}>
                           <TableCell style={scroolHide()}>PROVIDER NAME</TableCell>
                           <TableCell style={scroolHide()}>QUAIL RUN</TableCell>
                           <TableCell style={scroolHide()}>DESTINY SPRINGS</TableCell>
@@ -1210,19 +1243,23 @@ const Calendar = props => {
                       <TableBody>
                         {responseData.data && responseData.data.providersDetails ? (
                           responseData.data.providersDetails.map((provider, index) => (
-                            <tr key={index}>
-                              <td style={scroolHide()}>{provider.providerName}</td>
+                            <TableRow
+                              key={index}
+                              hover
+                              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                              <TableCell style={scroolHide()}>{provider.providerName}</TableCell>
                               {/* Quail Run */}
-                              <td style={scroolHide()}>
+                              <TableCell style={scroolHide()}>
                                 <span style={getTextColorStyle(provider.hospitalMap['Quail Run'].weekdays, 'red')}>
                                   {provider.hospitalMap['Quail Run'].weekdays}
                                 </span>
                                 <span style={getTextColorStyle(provider.hospitalMap['Quail Run'].weekends, 'blue')}>
                                   {provider.hospitalMap['Quail Run'].weekends}
                                 </span>
-                              </td>
+                              </TableCell>
                               {/* Destiny Springs */}
-                              <td style={scroolHide()}>
+                              <TableCell style={scroolHide()}>
                                 <span
                                   style={getTextColorStyle(provider.hospitalMap['Destiny Springs'].weekdays, 'red')}
                                 >
@@ -1233,18 +1270,18 @@ const Calendar = props => {
                                 >
                                   {provider.hospitalMap['Destiny Springs'].weekends}
                                 </span>
-                              </td>
+                              </TableCell>
                               {/* Valley */}
-                              <td style={scroolHide()}>
+                              <TableCell style={scroolHide()}>
                                 <span style={getTextColorStyle(provider.hospitalMap['Valley'].weekdays, 'red')}>
                                   {provider.hospitalMap['Valley'].weekdays}
                                 </span>
                                 <span style={getTextColorStyle(provider.hospitalMap['Valley'].weekends, 'blue')}>
                                   {provider.hospitalMap['Valley'].weekends}
                                 </span>
-                              </td>
+                              </TableCell>
                               {/* Copper Springs */}
-                              <td style={scroolHide()}>
+                              <TableCell style={scroolHide()}>
                                 <span style={getTextColorStyle(provider.hospitalMap['Copper Springs'].weekdays, 'red')}>
                                   {provider.hospitalMap['Copper Springs'].weekdays}
                                 </span>
@@ -1253,53 +1290,53 @@ const Calendar = props => {
                                 >
                                   {provider.hospitalMap['Copper Springs'].weekends}
                                 </span>
-                              </td>
+                              </TableCell>
                               {/* Oasis */}
-                              <td style={scroolHide()}>
+                              <TableCell style={scroolHide()}>
                                 <span style={getTextColorStyle(provider.hospitalMap['Oasis'].weekdays, 'red')}>
                                   {provider.hospitalMap['Oasis'].weekdays}
                                 </span>
                                 <span style={getTextColorStyle(provider.hospitalMap['Oasis'].weekends, 'blue')}>
                                   {provider.hospitalMap['Oasis'].weekends}
                                 </span>
-                              </td>
+                              </TableCell>
                               {/* Via Linda */}
-                              <td style={scroolHide()}>
+                              <TableCell style={scroolHide()}>
                                 <span style={getTextColorStyle(provider.hospitalMap['Via Linda'].weekdays, 'red')}>
                                   {provider.hospitalMap['Via Linda'].weekdays}
                                 </span>
                                 <span style={getTextColorStyle(provider.hospitalMap['Via Linda'].weekends, 'blue')}>
                                   {provider.hospitalMap['Via Linda'].weekends}
                                 </span>
-                              </td>
+                              </TableCell>
                               {/* Copper East */}
-                              <td style={scroolHide()}>
+                              <TableCell style={scroolHide()}>
                                 <span style={getTextColorStyle(provider.hospitalMap['Copper East'].weekdays, 'red')}>
                                   {provider.hospitalMap['Copper East'].weekdays}
                                 </span>
                                 <span style={getTextColorStyle(provider.hospitalMap['Copper East'].weekends, 'blue')}>
                                   {provider.hospitalMap['Copper East'].weekends}
                                 </span>
-                              </td>
+                              </TableCell>
                               {/* Zenith */}
-                              <td style={scroolHide()}>
+                              <TableCell style={scroolHide()}>
                                 <span style={getTextColorStyle(provider.hospitalMap['Zenith'].weekdays, 'red')}>
                                   {provider.hospitalMap['Zenith'].weekdays}
                                 </span>
                                 <span style={getTextColorStyle(provider.hospitalMap['Zenith'].weekends, 'blue')}>
                                   {provider.hospitalMap['Zenith'].weekends}
                                 </span>
-                              </td>
-                              <td style={scroolHide()}>{provider.totalDays}</td>
-                              <td style={scroolHide()}>{provider.totalWeekdays}</td>
-                              <td style={scroolHide()}>{provider.totalWeekends}</td>
-                              <td style={scroolHide()}>{provider.ratio}</td>
-                            </tr>
+                              </TableCell>
+                              <TableCell style={scroolHide()}>{provider.totalDays}</TableCell>
+                              <TableCell style={scroolHide()}>{provider.totalWeekdays}</TableCell>
+                              <TableCell style={scroolHide()}>{provider.totalWeekends}</TableCell>
+                              <TableCell style={scroolHide()}>{provider.ratio}</TableCell>
+                            </TableRow>
                           ))
                         ) : (
-                          <tr>
-                            <td colSpan='13'>Loading...</td>
-                          </tr>
+                          <TableRow>
+                            <TableCell colSpan='13'>Loading...</TableCell>
+                          </TableRow>
                         )}
                       </TableBody>
                     </Table>
@@ -1330,8 +1367,7 @@ const Calendar = props => {
                 </div>
               </Box>
             </Modal>
-            {isOneClickScheduleDisabled() === false ? (
-              <Button
+            {isOneClickScheduleDisabled() === false ? ( nextMonth === true ? <Button
                 color='warning'
                 className='justify-content-center me-2'
                 size='sm'
@@ -1339,8 +1375,16 @@ const Calendar = props => {
                 onClick={handleOneClickSchedule}
               >
                 One Click Schedule
-              </Button>
-            ) : null}
+              </Button> : <Button
+  color='secondary'
+  className='justify-content-center me-2'
+  size='sm'
+  style={BtnStyle3()}
+  onClick={handleOneClickSchedule}
+  disabled // Set the disabled attribute to true to disable the button
+>
+  One Click Schedule
+</Button>) : null}
           </div>
           <FullCalendar {...calendarOptions} />
         </div>
@@ -1452,7 +1496,6 @@ export default Calendar
     //   // eslint-disable-next-line no-underscore-dangle
     //   const colorName =
     //     calendarsColor[calendarEvent._def.extendedProps.calendar]
-    //   console.log('COLORNAME', colorName)
     //   //  background: rgba($color_value, 0.12) !important;
     //   // color: $color_value !important;
     //   // if(colorName)
