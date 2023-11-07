@@ -688,6 +688,10 @@ const MailLog = props => {
                         size='small'
                         onClick={() => {
                           ScheduleFetch(), handleClose()
+                          setProviderDataModal(null)
+                          setHospitalDataModal(null)
+                          setStartDateModal(null)
+                          setEndDateModal(null)
                         }}
                         disabled={!isScheduleButtonEnabled}
                       >
@@ -728,7 +732,7 @@ const MailLog = props => {
                       }
                     }}
                     size='small'
-                    style={{ marginTop: '23px' }}
+                    style={{ marginTop: '10px' }}
                     renderInput={params => <TextField {...params} label='Provider' placeholder='Select Provider' />}
                   />
                 </Grid>
@@ -751,12 +755,13 @@ const MailLog = props => {
                         setSelectedHospitalId(null)
                       }
                     }}
-                    style={{ marginTop: '23px' }}
+                    style={{ marginTop: '10px' }}
                     renderInput={params => <TextField {...params} label='Hospital' placeholder='Select Hospital' />}
                   />
                 </Grid>
                 <Grid item xs={6} style={{ display: 'flex' }}>
                   <DatePicker
+                    style={{ position: 'relative', zIndex: '9999999' }}
                     selected={startDate}
                     onChange={date => setStartDate(date)}
                     customInput={
@@ -779,6 +784,7 @@ const MailLog = props => {
                     )}
                   />
                   <DatePicker
+                    style={{ position: 'relative', zIndex: '9999999' }}
                     selected={endDate}
                     onChange={date => setEndDate(date)}
                     customInput={
@@ -948,7 +954,7 @@ const MailLog = props => {
                     </span>
                   ) : null
                 ) : (
-                  <div style={{ backgroundColor: '#E7EAEC' }}>
+                  <div style={{ backgroundColor: '#E7EAEC', width: '100%', marginLeft: '2px' }}>
                     {searchData?.length && !loading ? (
                       <Grid
                         container
