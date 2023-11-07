@@ -29,7 +29,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Modal from '@mui/material/Modal'
-import { format } from 'date-fns'
+import { format, startOfMonth, endOfMonth } from 'date-fns'
 import axios from 'axios'
 import Badge from '@mui/material/Badge'
 import withReactContent from 'sweetalert2-react-content'
@@ -125,6 +125,9 @@ const MailLog = props => {
   const formattedStartDateModal = startDateModal ? format(startDateModal, 'yyyy-MM-dd') : ''
   const formattedEndDateModal = endDateModal ? format(endDateModal, 'yyyy-MM-dd') : ''
   const today = new Date()
+
+  const firstDayOfCurrentMonth = startOfMonth(today)
+  const lastDayOfCurrentMonth = endOfMonth(today)
 
   //API
   const ProviderApi = process.env.NEXT_PUBLIC_FETCH_EVENTS_PROVIDERS
@@ -667,6 +670,10 @@ const MailLog = props => {
                         size='small'
                         onClick={() => {
                           ScheduleFetch(), handleClose()
+                          setProviderDataModal(null)
+                          setHospitalDataModal(null)
+                          setStartDateModal(null)
+                          setEndDateModal(null)
                         }}
                         disabled={!isScheduleButtonEnabled}
                       >
@@ -706,7 +713,7 @@ const MailLog = props => {
                       }
                     }}
                     size='small'
-                    style={{ marginTop: '23px' }}
+                    style={{ marginTop: '10px' }}
                     renderInput={params => <TextField {...params} label='Provider' placeholder='Select Provider' />}
                   />
                 </Grid>
@@ -728,12 +735,13 @@ const MailLog = props => {
                         setSelectedHospitalId(null)
                       }
                     }}
-                    style={{ marginTop: '23px' }}
+                    style={{ marginTop: '10px' }}
                     renderInput={params => <TextField {...params} label='Hospital' placeholder='Select Hospital' />}
                   />
                 </Grid>
                 <Grid item xs={6} style={{ display: 'flex' }}>
                   <DatePicker
+                    style={{ position: 'relative', zIndex: '9999999' }}
                     selected={startDate}
                     onChange={date => setStartDate(date)}
                     customInput={
@@ -754,8 +762,11 @@ const MailLog = props => {
                         <button onClick={increaseMonth}>{'>'}</button>
                       </div>
                     )}
+                    minDate={firstDayOfCurrentMonth} // Disable dates before the first day of the current month
+                    maxDate={lastDayOfCurrentMonth} // Disable dates after the last day of the current month
                   />
                   <DatePicker
+                    style={{ position: 'relative', zIndex: '9999999' }}
                     selected={endDate}
                     onChange={date => setEndDate(date)}
                     customInput={
@@ -924,7 +935,7 @@ const MailLog = props => {
                     </span>
                   ) : null
                 ) : (
-                  <div style={{ backgroundColor: '#E7EAEC' }}>
+                  <div style={{ backgroundColor: '#E7EAEC', width: '100%', marginLeft: '2px' }}>
                     {searchData?.length && !loading ? (
                       <Grid
                         container
@@ -1020,7 +1031,6 @@ const MailLog = props => {
                                               padding: '0.24rem',
                                               backgroundColor: new Date(i.date) > new Date() ? '#7367F0' : '#808080'
                                             }}
-                                         
                                             onClick={() => {
                                               if (new Date(i.date) > new Date()) {
                                                 handleOpen()
