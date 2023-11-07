@@ -1044,7 +1044,6 @@ const MailLog = props => {
                                               padding: '0.24rem',
                                               backgroundColor: new Date(i.date) > new Date() ? '#7367F0' : '#808080'
                                             }}
-                                         
                                             onClick={() => {
                                               if (new Date(i.date) > new Date()) {
                                                 handleOpen()
