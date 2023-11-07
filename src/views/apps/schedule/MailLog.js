@@ -190,7 +190,6 @@ const MailLog = props => {
             accountId: '1'
           })
         })
-        console.log(resp, 'welcome')
 
         if ((Object.values(resp.data)[0] !== undefined || []) && resp.data.providersList.length !== 0) {
           // Extract the provider data and set it in the state
@@ -259,7 +258,6 @@ const MailLog = props => {
           accountId: 1
         })
       })
-      console.log(selectedUserId)
       if (resp.data.leaveDatesApproved.length !== 0) {
         MySwal.fire({
           title: `Provider is on Leave on`,
@@ -299,8 +297,6 @@ const MailLog = props => {
           toDate: formattedEndDate
         })
       })
-      console.log(resp, 'resp')
-      console.log(selectedProviderId, 'userID')
 
       setIsSearched(true)
       setLoading(false)
@@ -333,7 +329,6 @@ const MailLog = props => {
           toDate: formattedEndDate
         })
       })
-      console.log(selectedProviderId)
       setIsSearched(true)
       setLoading(false)
       {
@@ -588,17 +583,7 @@ const MailLog = props => {
                         onChange={(event, newValue) => {
                           setProviderDataModal(newValue)
 
-                          // console.log('Selected Providers:', newValue)
-                          // // Update the selected provider IDs as a comma-separated string
-                          // if (Array.isArray(newValue)) {
-                          //   const selectedIds = newValue.map(provider => provider.userId)
-                          //   const idString = selectedIds.join(',') // Join the array with commas
-                          //   console.log(idString)
-                          //   setselectedProviderId(idString)
-                          // } else {
-                          //   setselectedProviderId(null) // Set it to null if no providers are selected
-                          // }
-                          // Extract userId from newValue
+                          
                           const userId = newValue ? newValue.userId : null
 
                           // Store the userId in state
@@ -617,7 +602,6 @@ const MailLog = props => {
                         size='small'
                         onChange={(event, newValue) => {
                           setHospitalDataModal(newValue)
-                          console.log('Selected his:', newValue)
 
                           // Update the selected hospital's hospitalId
                           if (newValue) {
@@ -711,7 +695,6 @@ const MailLog = props => {
                     value={providerData}
                     onChange={(event, newValue) => {
                       setProviderData(newValue)
-                      console.log('Selected Providers:', newValue)
 
                       // Update the selected provider IDs as a comma-separated string
                       if (newValue) {
@@ -737,7 +720,6 @@ const MailLog = props => {
                     size='small'
                     onChange={(event, newValue) => {
                       setHospitalData(newValue)
-                      console.log('Selected his:', newValue)
 
                       // Update the selected hospital's hospitalId
                       if (newValue) {

@@ -114,12 +114,9 @@ const ChangePasswordV2 = () => {
   })
 
   const onSubmit = async (data) => {
-    console.log(data)
     if (data.password === data.confirmPassword) {
-      console.log('d')
       const user = await Auth.signIn(username, password)
         const newUser = await Auth.completeNewPassword(user, data.password, {})
-        console.log(newUser)
         MySwal.fire({
           title: 'Success!',
           text:`Welcome to Corder Your username is ${username} and password is ${data.password}`,

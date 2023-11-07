@@ -88,7 +88,6 @@ const schema = yup.object().shape({
   })
 
   const onSubmit = async (data) => {
-    console.log(data)
     try {
       await Auth.forgotPassword(data.email)
       router.push('/new-password')

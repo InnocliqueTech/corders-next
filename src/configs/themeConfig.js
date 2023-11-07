@@ -21,7 +21,7 @@ const themeConfig = {
   navSubItemIcon: 'mi:circle' /* Icon */,
   verticalNavToggleType: 'collapse' /* accordion | collapse /*! Note: This is for Vertical navigation menu only */,
   navCollapsed: true /* true | false /*! Note: This is for Vertical navigation menu only */,
-  navigationSize: 280 /* Number in px(Pixels) /*! Note: This is for Vertical navigation menu only */,
+  navigationSize: 250 /* Number in px(Pixels) /*! Note: This is for Vertical navigation menu only */,
   collapsedNavigationSize: 85 /* Number in px(Pixels) /*! Note: This is for Vertical navigation menu only */,
   afterVerticalNavMenuContentPosition: 'static' /* fixed | static */,
   beforeVerticalNavMenuContentPosition: 'static' /* fixed | static */,

@@ -100,6 +100,7 @@ const defaultValues = {
 const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   // ** Hooks
   Amplify.configure(awsExports)
@@ -143,7 +144,6 @@ const LoginPage = () => {
       return user
 
   } catch (error) {  
-    console.log(error)
       MySwal.fire({
         title: 'Error!',
         text:error.message,
@@ -164,10 +164,15 @@ const LoginPage = () => {
   }
 
   const onSubmit = async (data) => {
+    if (loading) {
+      return 
+    }
     const { email, password } = data
     const cognito = await validate(email, password)
     localStorage.setItem('userCognito', JSON.stringify(cognito.signInUserSession))
+    setLoading(true)
     auth.login({ email, password, rememberMe }, () => {
+      setLoading(false)
       setError('email', {
         type: 'manual',
         message: 'Email or Password is invalid'
@@ -346,7 +351,7 @@ const LoginPage = () => {
                 </Typography>
               </Box>
               <Button fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
-                Login
+              {loading ? 'Loading...' : 'Sign In'}
               </Button>
               {/* <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', mr: 2 }}>New on our platform?</Typography>

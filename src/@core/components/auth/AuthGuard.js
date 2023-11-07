@@ -11,7 +11,6 @@ const AuthGuard = props => {
   const { children, fallback } = props
   const auth = useAuth()
   const router = useRouter()
-  console.log(router.asPath )
   useEffect(
     () => {
       if (!router.isReady) {

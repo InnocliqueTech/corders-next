@@ -9,8 +9,8 @@ import axios from 'axios'
 
 // ** Config
 import authConfig from 'src/configs/auth'
-import { Auth } from 'aws-amplify'
-
+import { Auth, Amplify} from 'aws-amplify'
+import awsExports from '../aws-exports'
 // ** Defaults
 const defaultProvider = {
   user: null,
@@ -20,6 +20,8 @@ const defaultProvider = {
   login: () => Promise.resolve(),
   logout: () => Promise.resolve()
 }
+Amplify.configure(awsExports)
+
 const AuthContext = createContext(defaultProvider)
 
 const ValidateUser = process.env.NEXT_PUBLIC_SESSION_DEATAILS
@@ -56,7 +58,6 @@ const AuthProvider = ({ children }) => {
     role:'admin',accessToken : JSON.stringify(accessToken) , refreshToken : JSON.stringify(refreshToken)})
           if (UserData) { 
             setLoading(false)
-            console.log(UserData.data)
             setUser({ ...UserData})
           }
           else {
@@ -64,11 +65,11 @@ const AuthProvider = ({ children }) => {
             localStorage.removeItem('refreshToken')
             localStorage.removeItem('accessToken')
             setUser(null)
+            Auth.signOut()
             setLoading(false)
             if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
               router.replace('/login')
             } 
-            console.log('is aiht')
           }
       } else {
         setLoading(false)
@@ -94,7 +95,6 @@ const AuthProvider = ({ children }) => {
 
         const returnUrl = router.query.returnUrl
 
-        console.log(response.data.data)
 
         const UserData =  Object.assign(response.data.data, {ability:[
           {
@@ -103,7 +103,6 @@ const AuthProvider = ({ children }) => {
       }
       ], 
       role:'admin',accessToken : JSON.stringify(accessToken) , refreshToken : JSON.stringify(refreshToken)})
-        console.log(JSON.stringify(UserData))
         setUser({ ...UserData })
         window.localStorage.setItem('userData', JSON.stringify(UserData))
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
@@ -117,7 +116,14 @@ const AuthProvider = ({ children }) => {
   const handleLogout = () => {
     setUser(null)
     window.localStorage.removeItem('userData')
-    window.localStorage.removeItem(authConfig.storageTokenKeyName)
+    window.localStorage.removeItem('refresh')
+    window.localStorage.removeItem('provider')
+    window.localStorage.removeItem('facility')
+    window.localStorage.removeItem('monthChange')
+    window.localStorage.removeItem('userCognito')
+    window.localStorage.removeItem('refreshToken')
+    window.localStorage.removeItem('accessToken')
+    Auth.signOut()
     router.push('/login')
   }
 

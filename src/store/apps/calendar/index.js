@@ -30,58 +30,29 @@ export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async (ca
   const hospitalFilter = calendars.b === null ? calendars.a : null
   const providerAllFilter = calendars.c === undefined ? null : calendars.c === 1 ? calendars.d : 1
   const hospitalAllFilter = calendars.e === undefined ? null : calendars.f === 1 ? calendars.e : 1
-  console.log(hospitalAllFilter)
 
   // Admin Filter View
   if (userRole.userValidation.rolesList.map(dat => dat.roleName).includes('Admin')) {
-    if (localStorage.getItem('key') === '1') {
-      const response = await axios.post(AdminCalendarView, {
-          requestType:"adminFilterView",
-          inputDate: monthChange === null ? input : monthChange,
-          searchProviderId:providerAllFilter === null ? (providerFilter === null ? String(getState().calendar.selectedtitle) : String(getState().calendar.selectedtitle.filter(i => i !== providerFilter))) : String(providerAllFilter),
-          searchHospitalId:hospitalAllFilter === null ? (hospitalFilter === null ? String(getState().calendar.selectedCalendars) : String(getState().calendar.selectedCalendars.filter(i => i !== hospitalFilter))) : String(hospitalAllFilter),
-          accountId:1
-        
-      }, { calendars })
-
-      const adminFilterData = response.data.filterViewInfo.map((dat, index) => ({
-          id: index,
-          url: '',
-          title: dat.providerName,
-          start: new Date(String(dat.scheduledDate)).toISOString(),
-          allDay: true,
-          extendedProps: {
-            calendar: dat.hospitalName
-          },
-          backgroundColor: 'white',
-          borderColor: 'white'
-      })) 
-
-      return adminFilterData
-    } else {
-      //Admin Calendar
-      const response = await axios.post(AdminCalendarView, {
-        requestType:"adminCalendarView",
-    inputDate:monthChange === null ? input : monthChange,
-    accountId:1
-      }, { calendars })
-
-      const adminData = response.data.adminCalendarView.map((dat, index) => ({
-          id: index,
-          url: '',
-          title: dat.providerName,
-          start: new Date(String(dat.scheduledDate)).toISOString(),
-          start_Date:new Date(String(dat.scheduledDate)).toISOString(),
-          allDay: true,
-          extendedProps: {
-            calendar: dat.hospitalName
-          },
-          backgroundColor: 'white',
-          borderColor: 'white'
-      })) 
-
-      return adminData
-    }
+    const response = await axios.post(AdminCalendarView, {
+      requestType:"adminCalendarView",
+  inputDate:monthChange === null ? input : monthChange,
+  accountId:1
+    }, { calendars })
+  
+    const adminData = response.data.adminCalendarView.map((dat, index) => ({
+        id: index,
+        url: '',
+        title: dat.providerName,
+        start: new Date(String(dat.scheduledDate)).toISOString(),
+        start_Date:new Date(String(dat.scheduledDate)).toISOString(),
+        allDay: true,
+        extendedProps: {
+          calendar: dat.hospitalName
+        },
+      
+    })) 
+  
+    return adminData
   } else {
     // Provider View
     const response = await axios.post(ProviderCalendarView, {
@@ -101,7 +72,8 @@ export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async (ca
           calendar: (dat.facilityName !== 'Uassigned') && (dat.facilityName !== null) ? dat.facilityName : ''
         },
         backgroundColor: 'white',
-        borderColor: 'white'
+        borderColor: 'white',
+        textColor:'orange'
   }))
 
   return providerData
@@ -185,7 +157,6 @@ export const appCalendarSlice = createSlice({
     builder
       .addCase(fetchEvents.fulfilled, (state, action) => {
         state.events = action.payload
-        console.log('ACTI', action)
       })
       .addCase(updateFilter.fulfilled, (state, action) => {
         if (state.selectedCalendars.includes(action.payload)) {
@@ -227,3 +198,50 @@ export const appCalendarSlice = createSlice({
 export const { selectEvent } = appCalendarSlice.actions
 
 export default appCalendarSlice.reducer
+
+// if (localStorage.getItem('key') === '1') {
+//   const response = await axios.post(AdminCalendarView, {
+//       requestType:"adminFilterView",
+//       inputDate: monthChange === null ? input : monthChange,
+//       searchProviderId:providerAllFilter === null ? (providerFilter === null ? String(getState().calendar.selectedtitle) : String(getState().calendar.selectedtitle.filter(i => i !== providerFilter))) : String(providerAllFilter),
+//       searchHospitalId:hospitalAllFilter === null ? (hospitalFilter === null ? String(getState().calendar.selectedCalendars) : String(getState().calendar.selectedCalendars.filter(i => i !== hospitalFilter))) : String(hospitalAllFilter),
+//       accountId:1
+    
+//   }, { calendars })
+
+//   const adminFilterData = response.data.filterViewInfo.map((dat, index) => ({
+//       id: index,
+//       url: '',
+//       title: dat.providerName,
+//       start: new Date(String(dat.scheduledDate)).toISOString(),
+//       allDay: true,
+//       extendedProps: {
+//         calendar: dat.hospitalName
+//       },
+   
+//   })) 
+
+//   return adminFilterData
+// } else {
+//   //Admin Calendar
+//   const response = await axios.post(AdminCalendarView, {
+//     requestType:"adminCalendarView",
+// inputDate:monthChange === null ? input : monthChange,
+// accountId:1
+//   }, { calendars })
+
+//   const adminData = response.data.adminCalendarView.map((dat, index) => ({
+//       id: index,
+//       url: '',
+//       title: dat.providerName,
+//       start: new Date(String(dat.scheduledDate)).toISOString(),
+//       start_Date:new Date(String(dat.scheduledDate)).toISOString(),
+//       allDay: true,
+//       extendedProps: {
+//         calendar: dat.hospitalName
+//       },
+    
+//   })) 
+
+//   return adminData
+// }
