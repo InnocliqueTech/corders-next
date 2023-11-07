@@ -167,7 +167,7 @@ const LeaveCheck = ({ popperPlacement }) => {
                                         popperPlacement={popperPlacement}
                                         placeholderText="Select End Date"
                                         onChange={(date) => setEndPicker(date)}
-                                        minDate={minEndDate} // Set the minimum end date
+                                       // minDate={minEndDate} // Set the minimum end date
                                         customInput={<CustomInput label='End Date' fullWidth />}
                                         required
                                     />
