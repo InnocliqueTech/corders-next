@@ -11,7 +11,9 @@ import axios from 'axios'
 import authConfig from 'src/configs/auth'
 import { Auth, Amplify} from 'aws-amplify'
 import awsExports from '../aws-exports'
+
 // ** Defaults
+
 const defaultProvider = {
   user: null,
   loading: true,
