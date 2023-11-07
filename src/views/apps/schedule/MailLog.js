@@ -29,7 +29,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Modal from '@mui/material/Modal'
-import { format } from 'date-fns'
+import { format, startOfMonth, endOfMonth } from 'date-fns'
 import axios from 'axios'
 import Badge from '@mui/material/Badge'
 import withReactContent from 'sweetalert2-react-content'
@@ -125,6 +125,9 @@ const MailLog = props => {
   const formattedStartDateModal = startDateModal ? format(startDateModal, 'yyyy-MM-dd') : ''
   const formattedEndDateModal = endDateModal ? format(endDateModal, 'yyyy-MM-dd') : ''
   const today = new Date()
+
+  const firstDayOfCurrentMonth = startOfMonth(today)
+  const lastDayOfCurrentMonth = endOfMonth(today)
 
   //API
   const ProviderApi = process.env.NEXT_PUBLIC_FETCH_EVENTS_PROVIDERS
@@ -777,6 +780,8 @@ const MailLog = props => {
                         <button onClick={increaseMonth}>{'>'}</button>
                       </div>
                     )}
+                    minDate={firstDayOfCurrentMonth} // Disable dates before the first day of the current month
+                    maxDate={lastDayOfCurrentMonth} // Disable dates after the last day of the current month
                   />
                   <DatePicker
                     style={{ position: 'relative', zIndex: '9999999' }}
