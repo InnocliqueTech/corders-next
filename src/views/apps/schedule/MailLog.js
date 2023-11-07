@@ -108,7 +108,6 @@ const MailLog = props => {
 
   const handleIconClick = () => {
     setIsClicked(true)
-    //onClear()
     setTimeout(() => {
       setIsClicked(false)
     }, 1000)
@@ -500,14 +499,11 @@ const MailLog = props => {
       ) : (
         <div
           style={{
-            // overflowY: 'scroll',
             overflowX: 'visible',
             backgroundColor: '#ffffff',
             width: isExpand ? '100%' : '100%',
-            // height: isExpand ? '20%' : 'auto',
             height: isExpand ? '20%' : searchButtonClicked ? 'auto' : '70%',
             padding: '16px',
-            //overflowY: isExpand ? '' : 'scroll'
             overflowY: searchButtonClicked ? 'scroll' : '',
             backgroundColor: isClicked ? '#b1b3b1' : '#ffffff'
           }}
@@ -677,7 +673,6 @@ const MailLog = props => {
                             <button onClick={increaseMonth}>{'>'}</button>
                           </div>
                         )}
-                        //minDate={today}
                         minDate={startDateModal}
                       />
                     </div>
@@ -840,7 +835,6 @@ const MailLog = props => {
                 <Grid
                   container
                   rowSpacing={6}
-                  //columnSpacing={{ xs: 3, sm: 5, md: 6 }}
                   style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                 >
                   <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -1026,7 +1020,6 @@ const MailLog = props => {
                                                 ) : item.leaveDescription === 'Leave Approved' ? (
                                                   <Button
                                                     size='small'
-                                                    //color='warning'
                                                     style={{ backgroundColor: '#FF9F43', color: '#ffffff' }}
                                                     onClick={() => {
                                                       setScheduleData(item)
@@ -1051,15 +1044,7 @@ const MailLog = props => {
                                               padding: '0.24rem',
                                               backgroundColor: new Date(i.date) > new Date() ? '#7367F0' : '#808080'
                                             }}
-                                            // className={`miui-schedule-badge ${
-                                            //   new Date(i.date) > new Date() ? ' bg-primary' : 'miui-secondary'
-                                            // }`}
-
-                                            // onClick={() => {
-                                            //   if (new Date(i.date) > new Date()) {
-                                            //     setModalSuccess(!modalSuccess)
-                                            //   }
-                                            // }}
+                                         
                                             onClick={() => {
                                               if (new Date(i.date) > new Date()) {
                                                 handleOpen()

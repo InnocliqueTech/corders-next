@@ -122,7 +122,17 @@ const App = props => {
                       </AclGuard>
                     </Guard>
                     <ReactHotToast>
-                      <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                    <Toaster 
+                       containerStyle={{
+                       zIndex: '9999 !important'
+                      }}
+                       position={settings.toastPosition} 
+                       toastOptions={{ className: 'react-hot-toast', 
+                       style: {
+                        zIndex: '9999 !important'
+                        }
+                        }} 
+                        />
                     </ReactHotToast>
                   </ThemeComponent>
                 )

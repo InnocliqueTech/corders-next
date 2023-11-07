@@ -249,12 +249,9 @@ const AddEventSidebar = props => {
   const facility = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('facility')) : null
   const provider = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('provider')) : null
   const userRole = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("userData")) : null
-  console.log(facility, "facility")
   const color = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'primary', 'primary']
   const facilityData = facility !== null ? facility.map((v, i) => ({ label: v.hospitalName, id: v.hospitalId, value: v.hospitalName, color: color[i] })) : null
   const providerData = provider !== null ? provider.map((v, i) => ({ label: v.firstName, id: v.userId, value: v.firstName, color: color[i] })) : null
-  console.log(providerData, "provider data")
-  console.log(facilityData, "facility data")
   
   //API 
   const ProviderApi = process.env.NEXT_PUBLIC_FETCH_EVENTS_PROVIDERS
@@ -280,9 +277,7 @@ const AddEventSidebar = props => {
   }
 
   const handleSelectedEvent = async () => {
-    console.log('handleSelectedEvent')
     if (!isObjEmpty(selectedEvent)) {
-      console.log(selectedEvent, "selectedEvent")
       const calendar = selectedEvent.extendedProps.calendar
 
       const resolveLabel = () => {
@@ -299,17 +294,13 @@ const AddEventSidebar = props => {
         setStartPicker(new Date(String(selectedEvent._instance.range.end)))
       }
       setCalendarLabel([resolveLabel()])
-      console.log(String(selectedEvent.start).includes('India'), "String(selectedEvent.start).includes('India')")
-      console.log(selectEvent.start, "selected")
 
-     // console.log(new Date(String(selectedEvent._instance.range.end)), "set")
     }
 
     await showLeaves(selectedEvent.start)
   }
 
   useEffect(() => {
-      console.log('addEventSidebarOpen', addEventSidebarOpen)
       if(addEventSidebarOpen == true) {
         handleSelectedEvent() 
       }
@@ -412,7 +403,6 @@ const AddEventSidebar = props => {
             accountId: '1'
           })
         })
-        console.log(resp, 'welcome')
 
         if ((Object.values(resp.data)[0] !== undefined || []) && resp.data.providersList.length !== 0) {
           // Extract the provider data and set it in the state
@@ -737,7 +727,6 @@ const AddEventSidebar = props => {
 
           // style={{ backgroundColor: '#F8F8F8',  borderRadius: '5px', margin:"4px" }}
           >
-            {console.log('store', store, facilityData, calendarLabel[0], store, store)}
             {store.selectedEvent !== null && store.selectedEvent.title && store.selectedEvent.title.length ? 'Update Event' : 'Add Event'}
             <Icon onClick={handleAddEventSidebarToggle} icon='tabler:x' fontSize={20} style={{ color: '#7367F0', cursor: 'pointer' }} />
           </div>
@@ -749,7 +738,6 @@ const AddEventSidebar = props => {
                 if (data.title.label.length) {
                   if (isObjEmpty(errors)) {
                     if (isObjEmpty(selectedEvent) || (!isObjEmpty(selectedEvent) && !selectedEvent.title.length)) {
-                    console.log('374')
                       ScheduleFetch()
                       handleAddEvent()
                     } else {
@@ -824,7 +812,6 @@ const AddEventSidebar = props => {
                       enable: [startPicker]
                     }}
                   />
-                  {console.log(startPicker, "startpicker")}
                 </div>
               </div>
               <div style={{ marginTop: '10px' }}>
@@ -838,7 +825,6 @@ const AddEventSidebar = props => {
               <div style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", margin: "20px" }}>
                 <List>
                   <h3 style={{ marginLeft: "12px", marginTop: "-5px" }}>Physician  On Leave</h3>
-                  {console.log(leaves, "leave")}
                   {leaves.length > 0 ? (
                     leaves.map((dt) => (
                       <ListItem key={dt.id} >
