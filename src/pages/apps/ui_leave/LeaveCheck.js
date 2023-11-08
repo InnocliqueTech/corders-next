@@ -152,7 +152,15 @@ const LeaveCheck = ({ popperPlacement }) => {
                       setPicker(date)
                       setMinEndDate(moment(date).toDate()) // Set minimum end date
                     }}
-                    customInput={<CustomInput label='Start Date' fullWidth />}
+                    customInput={
+                      <CustomInput
+                        label='Start Date'
+                        fullWidth
+                        InputProps={{
+                          readOnly: true // Make the input field read-only
+                        }}
+                      />
+                    }
                     required
                   />
                 </Grid>
@@ -167,7 +175,15 @@ const LeaveCheck = ({ popperPlacement }) => {
                     placeholderText='Select End Date'
                     onChange={date => setEndPicker(date)}
                     minDate={minEndDate} // Set the minimum end date
-                    customInput={<CustomInput label='End Date' fullWidth />}
+                    customInput={
+                      <CustomInput
+                        label='End Date'
+                        fullWidth
+                        InputProps={{
+                          readOnly: true // Make the input field read-only
+                        }}
+                      />
+                    }
                     required
                   />
                 </Grid>
