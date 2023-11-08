@@ -29,7 +29,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Modal from '@mui/material/Modal'
-import { format, startOfMonth, endOfMonth } from 'date-fns'
+import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns'
 import axios from 'axios'
 import Badge from '@mui/material/Badge'
 import withReactContent from 'sweetalert2-react-content'
@@ -108,6 +108,7 @@ const MailLog = props => {
 
   const handleIconClick = () => {
     setIsClicked(true)
+    //onClear()
     setTimeout(() => {
       setIsClicked(false)
     }, 1000)
@@ -193,6 +194,7 @@ const MailLog = props => {
             accountId: '1'
           })
         })
+        console.log(resp, 'welcome')
 
         if ((Object.values(resp.data)[0] !== undefined || []) && resp.data.providersList.length !== 0) {
           // Extract the provider data and set it in the state
@@ -261,6 +263,7 @@ const MailLog = props => {
           accountId: 1
         })
       })
+      console.log(selectedUserId)
       if (resp.data.leaveDatesApproved.length !== 0) {
         MySwal.fire({
           title: `Provider is on Leave on`,
@@ -300,6 +303,8 @@ const MailLog = props => {
           toDate: formattedEndDate
         })
       })
+      console.log(resp, 'resp')
+      console.log(selectedProviderId, 'userID')
 
       setIsSearched(true)
       setLoading(false)
@@ -332,6 +337,7 @@ const MailLog = props => {
           toDate: formattedEndDate
         })
       })
+      console.log(selectedProviderId)
       setIsSearched(true)
       setLoading(false)
       {
@@ -497,11 +503,14 @@ const MailLog = props => {
       ) : (
         <div
           style={{
+            // overflowY: 'scroll',
             overflowX: 'visible',
             backgroundColor: '#ffffff',
             width: isExpand ? '100%' : '100%',
+            // height: isExpand ? '20%' : 'auto',
             height: isExpand ? '20%' : searchButtonClicked ? 'auto' : '70%',
             padding: '16px',
+            //overflowY: isExpand ? '' : 'scroll'
             overflowY: searchButtonClicked ? 'scroll' : '',
             backgroundColor: isClicked ? '#b1b3b1' : '#ffffff'
           }}
@@ -541,7 +550,7 @@ const MailLog = props => {
               </div>
             </div>
             {showScheduleButton && (
-              <div style={{ float: 'right', marginTop: '15px' }}>
+              <div style={{ float: 'right', marginTop: '12px' }}>
                 <Button variant='contained' size='small' onClick={handleOpen}>
                   Schedule
                 </Button>
@@ -586,7 +595,17 @@ const MailLog = props => {
                         onChange={(event, newValue) => {
                           setProviderDataModal(newValue)
 
-                          
+                          // console.log('Selected Providers:', newValue)
+                          // // Update the selected provider IDs as a comma-separated string
+                          // if (Array.isArray(newValue)) {
+                          //   const selectedIds = newValue.map(provider => provider.userId)
+                          //   const idString = selectedIds.join(',') // Join the array with commas
+                          //   console.log(idString)
+                          //   setselectedProviderId(idString)
+                          // } else {
+                          //   setselectedProviderId(null) // Set it to null if no providers are selected
+                          // }
+                          // Extract userId from newValue
                           const userId = newValue ? newValue.userId : null
 
                           // Store the userId in state
@@ -605,6 +624,7 @@ const MailLog = props => {
                         size='small'
                         onChange={(event, newValue) => {
                           setHospitalDataModal(newValue)
+                          console.log('Selected his:', newValue)
 
                           // Update the selected hospital's hospitalId
                           if (newValue) {
@@ -626,6 +646,9 @@ const MailLog = props => {
                             placeholder='Select Start Date'
                             size='small'
                             style={{ marginTop: '23px', width: '440px' }}
+                            InputProps={{
+                              readOnly: true // Make the input field read-only
+                            }}
                           />
                         }
                         popperPlacement='top'
@@ -649,6 +672,9 @@ const MailLog = props => {
                             placeholder='Select End Date'
                             size='small'
                             style={{ marginTop: '23px', width: '440px' }}
+                            InputProps={{
+                              readOnly: true // Make the input field read-only
+                            }}
                           />
                         }
                         popperPlacement='top'
@@ -660,6 +686,7 @@ const MailLog = props => {
                             <button onClick={increaseMonth}>{'>'}</button>
                           </div>
                         )}
+                        //minDate={today}
                         minDate={startDateModal}
                       />
                     </div>
@@ -702,6 +729,7 @@ const MailLog = props => {
                     value={providerData}
                     onChange={(event, newValue) => {
                       setProviderData(newValue)
+                      console.log('Selected Providers:', newValue)
 
                       // Update the selected provider IDs as a comma-separated string
                       if (newValue) {
@@ -713,7 +741,7 @@ const MailLog = props => {
                       }
                     }}
                     size='small'
-                    style={{ marginTop: '10px' }}
+                    style={{ marginTop: '5px' }}
                     renderInput={params => <TextField {...params} label='Provider' placeholder='Select Provider' />}
                   />
                 </Grid>
@@ -727,6 +755,7 @@ const MailLog = props => {
                     size='small'
                     onChange={(event, newValue) => {
                       setHospitalData(newValue)
+                      console.log('Selected his:', newValue)
 
                       // Update the selected hospital's hospitalId
                       if (newValue) {
@@ -735,13 +764,12 @@ const MailLog = props => {
                         setSelectedHospitalId(null)
                       }
                     }}
-                    style={{ marginTop: '10px' }}
+                    style={{ marginTop: '5px' }}
                     renderInput={params => <TextField {...params} label='Hospital' placeholder='Select Hospital' />}
                   />
                 </Grid>
                 <Grid item xs={6} style={{ display: 'flex' }}>
                   <DatePicker
-                    style={{ position: 'relative', zIndex: '9999999' }}
                     selected={startDate}
                     onChange={date => setStartDate(date)}
                     customInput={
@@ -751,22 +779,26 @@ const MailLog = props => {
                         placeholder='Select Start Date'
                         size='small'
                         style={{ width: '90%' }}
+                        InputProps={{
+                          readOnly: true // Make the input field read-only
+                        }}
                       />
                     }
                     popperPlacement='bottom'
                     dateFormat='dd MMMM, yyyy' // Set the custom date format
+                    //minDate={firstDayOfCurrentMonth} // Disable dates before the first day of the current month
+                    //maxDate={lastDayOfCurrentMonth} // Disable dates after the last day of the current month
+
                     renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <button onClick={decreaseMonth}>{'<'}</button>
-                        <span>{format(date, 'MMMM yyyy')}</span>
+                        {/* <span>{format(date, 'MMMM yyyy')}</span> */}
+                        <span>{date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
                         <button onClick={increaseMonth}>{'>'}</button>
                       </div>
                     )}
-                    minDate={firstDayOfCurrentMonth} // Disable dates before the first day of the current month
-                    maxDate={lastDayOfCurrentMonth} // Disable dates after the last day of the current month
                   />
                   <DatePicker
-                    style={{ position: 'relative', zIndex: '9999999' }}
                     selected={endDate}
                     onChange={date => setEndDate(date)}
                     customInput={
@@ -776,6 +808,9 @@ const MailLog = props => {
                         placeholder='Select End Date'
                         size='small'
                         style={{ float: 'right', width: '90%' }}
+                        InputProps={{
+                          readOnly: true // Make the input field read-only
+                        }}
                       />
                     }
                     popperPlacement='bottom'
@@ -822,6 +857,7 @@ const MailLog = props => {
                 <Grid
                   container
                   rowSpacing={6}
+                  //columnSpacing={{ xs: 3, sm: 5, md: 6 }}
                   style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                 >
                   <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -1007,6 +1043,7 @@ const MailLog = props => {
                                                 ) : item.leaveDescription === 'Leave Approved' ? (
                                                   <Button
                                                     size='small'
+                                                    //color='warning'
                                                     style={{ backgroundColor: '#FF9F43', color: '#ffffff' }}
                                                     onClick={() => {
                                                       setScheduleData(item)
@@ -1031,6 +1068,15 @@ const MailLog = props => {
                                               padding: '0.24rem',
                                               backgroundColor: new Date(i.date) > new Date() ? '#7367F0' : '#808080'
                                             }}
+                                            // className={`miui-schedule-badge ${
+                                            //   new Date(i.date) > new Date() ? ' bg-primary' : 'miui-secondary'
+                                            // }`}
+
+                                            // onClick={() => {
+                                            //   if (new Date(i.date) > new Date()) {
+                                            //     setModalSuccess(!modalSuccess)
+                                            //   }
+                                            // }}
                                             onClick={() => {
                                               if (new Date(i.date) > new Date()) {
                                                 handleOpen()
