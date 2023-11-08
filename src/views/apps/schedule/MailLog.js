@@ -29,7 +29,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Modal from '@mui/material/Modal'
-import { format, startOfMonth, endOfMonth } from 'date-fns'
+import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns'
 import axios from 'axios'
 import Badge from '@mui/material/Badge'
 import withReactContent from 'sweetalert2-react-content'
@@ -108,6 +108,7 @@ const MailLog = props => {
 
   const handleIconClick = () => {
     setIsClicked(true)
+    //onClear()
     setTimeout(() => {
       setIsClicked(false)
     }, 1000)
@@ -502,11 +503,14 @@ const MailLog = props => {
       ) : (
         <div
           style={{
+            // overflowY: 'scroll',
             overflowX: 'visible',
             backgroundColor: '#ffffff',
             width: isExpand ? '100%' : '100%',
+            // height: isExpand ? '20%' : 'auto',
             height: isExpand ? '20%' : searchButtonClicked ? 'auto' : '70%',
             padding: '16px',
+            //overflowY: isExpand ? '' : 'scroll'
             overflowY: searchButtonClicked ? 'scroll' : '',
             backgroundColor: isClicked ? '#b1b3b1' : '#ffffff'
           }}
@@ -546,7 +550,7 @@ const MailLog = props => {
               </div>
             </div>
             {showScheduleButton && (
-              <div style={{ float: 'right', marginTop: '15px' }}>
+              <div style={{ float: 'right', marginTop: '12px' }}>
                 <Button variant='contained' size='small' onClick={handleOpen}>
                   Schedule
                 </Button>
@@ -676,6 +680,7 @@ const MailLog = props => {
                             <button onClick={increaseMonth}>{'>'}</button>
                           </div>
                         )}
+                        //minDate={today}
                         minDate={startDateModal}
                       />
                     </div>
@@ -730,7 +735,7 @@ const MailLog = props => {
                       }
                     }}
                     size='small'
-                    style={{ marginTop: '10px' }}
+                    style={{ marginTop: '5px' }}
                     renderInput={params => <TextField {...params} label='Provider' placeholder='Select Provider' />}
                   />
                 </Grid>
@@ -753,13 +758,12 @@ const MailLog = props => {
                         setSelectedHospitalId(null)
                       }
                     }}
-                    style={{ marginTop: '10px' }}
+                    style={{ marginTop: '5px' }}
                     renderInput={params => <TextField {...params} label='Hospital' placeholder='Select Hospital' />}
                   />
                 </Grid>
                 <Grid item xs={6} style={{ display: 'flex' }}>
                   <DatePicker
-                    style={{ position: 'relative', zIndex: '9999999' }}
                     selected={startDate}
                     onChange={date => setStartDate(date)}
                     customInput={
@@ -773,18 +777,18 @@ const MailLog = props => {
                     }
                     popperPlacement='bottom'
                     dateFormat='dd MMMM, yyyy' // Set the custom date format
+                    //minDate={firstDayOfCurrentMonth} // Disable dates before the first day of the current month
+                    //maxDate={lastDayOfCurrentMonth} // Disable dates after the last day of the current month
                     renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <button onClick={decreaseMonth}>{'<'}</button>
-                        <span>{format(date, 'MMMM yyyy')}</span>
+                        {/* <span>{format(date, 'MMMM yyyy')}</span> */}
+                        <span>{date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
                         <button onClick={increaseMonth}>{'>'}</button>
                       </div>
                     )}
-                    minDate={firstDayOfCurrentMonth} // Disable dates before the first day of the current month
-                    maxDate={lastDayOfCurrentMonth} // Disable dates after the last day of the current month
                   />
                   <DatePicker
-                    style={{ position: 'relative', zIndex: '9999999' }}
                     selected={endDate}
                     onChange={date => setEndDate(date)}
                     customInput={
@@ -840,6 +844,7 @@ const MailLog = props => {
                 <Grid
                   container
                   rowSpacing={6}
+                  //columnSpacing={{ xs: 3, sm: 5, md: 6 }}
                   style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                 >
                   <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -1025,6 +1030,7 @@ const MailLog = props => {
                                                 ) : item.leaveDescription === 'Leave Approved' ? (
                                                   <Button
                                                     size='small'
+                                                    //color='warning'
                                                     style={{ backgroundColor: '#FF9F43', color: '#ffffff' }}
                                                     onClick={() => {
                                                       setScheduleData(item)
@@ -1049,6 +1055,15 @@ const MailLog = props => {
                                               padding: '0.24rem',
                                               backgroundColor: new Date(i.date) > new Date() ? '#7367F0' : '#808080'
                                             }}
+                                            // className={`miui-schedule-badge ${
+                                            //   new Date(i.date) > new Date() ? ' bg-primary' : 'miui-secondary'
+                                            // }`}
+
+                                            // onClick={() => {
+                                            //   if (new Date(i.date) > new Date()) {
+                                            //     setModalSuccess(!modalSuccess)
+                                            //   }
+                                            // }}
                                             onClick={() => {
                                               if (new Date(i.date) > new Date()) {
                                                 handleOpen()

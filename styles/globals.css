@@ -36,3 +36,8 @@ code[class*='language-'] {
 float: right;
 }
 
+.react-datepicker__day--outside-month {
+  color: transparent !important;
+  pointer-events: none;
+}
+   
