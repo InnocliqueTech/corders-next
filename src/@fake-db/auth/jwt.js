@@ -176,7 +176,6 @@ mock.onGet('/auth/me').reply(config => {
         const obj = { userData: { ...user, password: undefined } }
 
         // ** return 200 with user data
-        console.log(obj)
         response = [200, obj]
       }
     } else {

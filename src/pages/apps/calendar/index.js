@@ -103,7 +103,6 @@ const AppCalendar = () => {
   const { settings } = useSettings()
   const dispatch = useDispatch()
   const store = useSelector(state => state.calendar)
-  console.log('STORE', store)
 
   // ** Vars
   const leftSidebarWidth = 300

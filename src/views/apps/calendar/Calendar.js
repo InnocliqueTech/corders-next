@@ -141,7 +141,6 @@ const Calendar = props => {
   const [subTitle, setSubTitle] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
   const [active, setActive] = useState('1')
-  const [datePicker, setDatePicker] = useState('')
   const [divVisible, setDivVisible] = useState(true)
 
   useEffect(() => {
@@ -287,7 +286,7 @@ const Calendar = props => {
   const newArr = store.events.map(obj => {
     return {
       ...obj,
-      title: obj.Leave === '' ? `${obj.title}` : `${obj.title} - ${obj.Leave}`
+      title: obj.Leave === '' || obj.title === '' ? `${obj.title}` || `${obj.Leave}` : `${obj.title}-${obj.Leave}`
     }
   })
 
@@ -609,8 +608,10 @@ const Calendar = props => {
         date: picker.map(dat => dat.format('YYYY-MM-DD')).toString(),
         providerId: userRole.userId
       })
+      
       // .then(res => console.log(res, 'res from handlesuccess'))
       // .catch(err => console.log(err, 'err from handlesuccess'))
+
       .then(res => {
         console.log(res, 'res from handlesuccess')
         toast.success('Leave applied successfully') // Show success toast
@@ -906,10 +907,9 @@ const Calendar = props => {
     )
   }
 
-  const handleButtonClick = value => {
-    setActive(value)
-  }
-  console.log(nextMonth)
+  const handleButtonClick = (value) => {
+    setActive(value);
+  };
   const monthNameAndYear = getCurrentMonthNameAndYear()
 
   if (store) {
@@ -1297,17 +1297,7 @@ const Calendar = props => {
                 </div>
               </Box>
             </Modal>
-            {isOneClickScheduleDisabled() === false ? (
-              nextMonth === true ? (
-                <Button color='warning' size='sm' onClick={handleOneClickSchedule} variant='contained'>
-                  One Click Schedule
-                </Button>
-              ) : (
-                <Button size='sm' disabled variant='contained'>
-                  One Click Schedule
-                </Button>
-              )
-            ) : null}
+            {userRole.userValidation.rolesList.map(dat => dat.roleName).includes('Admin') ? isOneClickScheduleDisabled() === false ? nextMonth === true ? <Button color='warning' size='sm' onClick={handleOneClickSchedule} variant='contained' >One Click Schedule</Button> : <Button size='sm' disabled variant='contained' >One Click Schedule</Button> : null : null}    
           </div>
           <FullCalendar {...calendarOptions} />
         </div>
