@@ -71,9 +71,9 @@ export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async (ca
         extendedProps: {
           calendar: (dat.facilityName !== 'Uassigned') && (dat.facilityName !== null) ? dat.facilityName : ''
         },
-        backgroundColor: 'white',
-        borderColor: 'white',
-        textColor:'orange'
+        // backgroundColor: 'white',
+        // borderColor: 'white',
+        // textColor:'orange'
   }))
 
   return providerData

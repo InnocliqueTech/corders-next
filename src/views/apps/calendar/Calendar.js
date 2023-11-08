@@ -325,7 +325,7 @@ const Calendar = props => {
     dragScroll: true,
     dayMaxEvents: 6,
     navLinks: true,
-    height: 1100,
+    height: 1495,
     eventClassNames({ event: calendarEvent }) {
       // @ts-ignore
       const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar]
