@@ -439,11 +439,106 @@ const MailLog = props => {
       setLoading(false)
       SearchFetch()
       OnlyLeavesFetch()
+      //toast.success('Leave approved successfully..!') // Show success toast
     } catch (err) {
       setLoading(false)
       console.error(err)
     }
   }
+
+  // const handleDenial = async item => {
+  //   MySwal.fire({
+  //     title: 'Are you Sure?',
+  //     text: `You want to deny the leave on ${item.scheduledDate} for ${
+  //       item.firstName === undefined ? item.providerName : item.firstName
+  //     }`,
+  //     icon: 'error',
+  //     confirmButtonText: 'Deny',
+  //     showCancelButton: true,
+  //     customClass: {
+  //       confirmButton: 'btn btn-primary',
+  //       cancelButton: 'btn btn-outline-danger ms-1'
+  //     },
+  //     buttonsStyling: false
+  //   }).then(function (result) {
+  //     if (result.value) {
+  //       setLoading(true)
+  //       axios({
+  //         method: 'POST',
+  //         url: LeaveApprovalApi,
+  //         headers: {
+  //           'Content-Type': 'application/x-www-form-urlencoded'
+  //         },
+  //         data: JSON.stringify({
+  //           requestType: 'LeaveApprovals',
+  //           isHalfday: 0,
+
+  //           //alteredBy: 9,
+  //           alteredBy: userRole.userId,
+  //           providerId: item.providerId,
+  //           date: item.scheduledDate,
+  //           status: 2
+  //         })
+  //       })
+  //       setLoading(false)
+  //       SearchFetch()
+  //       OnlyLeavesFetch()
+  //     }
+  //   })
+  // }
+
+  // const handleDenial = async item => {
+  //   MySwal.fire({
+  //     title: 'Are you Sure?',
+  //     text: `You want to deny the leave on ${item.scheduledDate} for ${
+  //       item.firstName === undefined ? item.providerName : item.firstName
+  //     }`,
+  //     icon: 'error',
+  //     confirmButtonText: 'Deny',
+  //     showCancelButton: true,
+  //     customClass: {
+  //       confirmButton: 'btn btn-primary',
+  //       cancelButton: 'btn btn-outline-danger ms-1'
+  //     },
+  //     buttonsStyling: false
+  //   }).then(async function (result) {
+  //     if (result.value) {
+  //       setLoading(true)
+
+  //       try {
+  //         const response = await axios({
+  //           method: 'POST',
+  //           url: LeaveApprovalApi,
+  //           headers: {
+  //             'Content-Type': 'application/x-www-form-urlencoded'
+  //           },
+  //           data: JSON.stringify({
+  //             requestType: 'LeaveApprovals',
+  //             isHalfday: 0,
+  //             alteredBy: userRole.userId,
+  //             providerId: item.providerId,
+  //             date: item.scheduledDate,
+  //             status: 2
+  //           })
+  //         })
+
+  //         if (response.status === 200) {
+  //           // Denial was successful
+  //           SearchFetch()
+  //           OnlyLeavesFetch()
+  //         } else {
+  //           // Handle the case where the denial request fails
+  //           toast.error('Leave denial request failed.')
+  //         }
+  //       } catch (error) {
+  //         // Handle any errors that occur during the request
+  //         toast.error('An error occurred while denying leave.')
+  //       } finally {
+  //         setLoading(false)
+  //       }
+  //     }
+  //   })
+  // }
 
   const handleDenial = async item => {
     MySwal.fire({
@@ -459,29 +554,36 @@ const MailLog = props => {
         cancelButton: 'btn btn-outline-danger ms-1'
       },
       buttonsStyling: false
-    }).then(function (result) {
+    }).then(async function (result) {
       if (result.value) {
         setLoading(true)
-        axios({
-          method: 'POST',
-          url: LeaveApprovalApi,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          data: JSON.stringify({
-            requestType: 'LeaveApprovals',
-            isHalfday: 0,
-
-            //alteredBy: 9,
-            alteredBy: userRole.userId,
-            providerId: item.providerId,
-            date: item.scheduledDate,
-            status: 2
+        try {
+          // Your axios code for denying the leave
+          // Assuming the leave is denied successfully, show a success toast
+          await axios({
+            method: 'POST',
+            url: LeaveApprovalApi,
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: JSON.stringify({
+              requestType: 'LeaveApprovals',
+              isHalfday: 0,
+              alteredBy: userRole.userId,
+              providerId: item.providerId,
+              date: item.scheduledDate,
+              status: 2
+            })
           })
-        })
-        setLoading(false)
-        SearchFetch()
-        OnlyLeavesFetch()
+
+          toast.error('Leave denied successfully')
+          setLoading(false)
+          SearchFetch()
+          OnlyLeavesFetch()
+        } catch (error) {
+          toast.error('Error denying the leave')
+          setLoading(false)
+        }
       }
     })
   }
@@ -526,13 +628,13 @@ const MailLog = props => {
                 <h5>Physician Scheduling</h5>
               </div>
               <div style={{ display: 'flex' }}>
-                <div style={{ marginTop: '12px', cursor: 'pointer' }} onClick={handleClick}>
+                <div style={{ marginTop: '10px', cursor: 'pointer' }} onClick={handleClick}>
                   <Icon icon='tabler:chevron-down' fontSize={18} />
                 </div>
-                <div style={{ marginTop: '12px', marginLeft: '18px', cursor: 'pointer' }}>
+                <div style={{ marginTop: '10px', marginLeft: '18px', cursor: 'pointer' }}>
                   <Icon icon='tabler:refresh' fontSize={18} onClick={handleIconClick} />
                 </div>
-                <div style={{ marginTop: '12px', marginLeft: '18px', cursor: 'pointer' }}>
+                <div style={{ marginTop: '10px', marginLeft: '18px', cursor: 'pointer' }}>
                   <Icon icon='tabler:x' fontSize={18} onClick={hideToClick} />
                 </div>
                 {showProgress && (
@@ -550,7 +652,7 @@ const MailLog = props => {
               </div>
             </div>
             {showScheduleButton && (
-              <div style={{ float: 'right', marginTop: '12px' }}>
+              <div style={{ float: 'right', marginTop: '7px' }}>
                 <Button variant='contained' size='small' onClick={handleOpen}>
                   Schedule
                 </Button>
@@ -637,6 +739,7 @@ const MailLog = props => {
                         renderInput={params => <TextField {...params} label='Hospital' placeholder='Select Hospital' />}
                       />
                       <DatePicker
+                        style={{ marginBottom: '-100px' }}
                         selected={startDateModal}
                         onChange={date => setStartDateModal(date)}
                         customInput={
@@ -1161,6 +1264,9 @@ const MailLog = props => {
               variant='contained'
               onClick={() => {
                 LeaveApprovalFetch(1), setLeaveApprovalModal(false)
+                toast.success('Leave approved successfully..!', {
+                  position: 'top-right'
+                })
               }}
             >
               Yes
@@ -1234,6 +1340,10 @@ const MailLog = props => {
               size='medium'
               onClick={() => {
                 LeaveApprovalFetch(2), setLeaveDeniedModal(!leaveDeniedModal)
+                // Display the toast message
+                toast.error('Leave Denied successfully ..!', {
+                  position: 'top-right'
+                })
               }}
             >
               Yes
