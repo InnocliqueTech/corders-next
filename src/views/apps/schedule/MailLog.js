@@ -794,7 +794,6 @@ const MailLog = props => {
                             <button onClick={increaseMonth}>{'>'}</button>
                           </div>
                         )}
-                        //minDate={today}
                         minDate={startDateModal}
                       />
                     </div>
@@ -817,7 +816,6 @@ const MailLog = props => {
                       <Button
                         size='small'
                         style={{ marginLeft: '15px', backgroundColor: '#82868B', color: 'white' }}
-                        //onClick={() => {handleClose}}
                         onClick={() => {
                           handleClose()
                           setProviderDataModal(null) // Clear the Provider input field
@@ -972,7 +970,6 @@ const MailLog = props => {
                 <Grid
                   container
                   rowSpacing={6}
-                  //columnSpacing={{ xs: 3, sm: 5, md: 6 }}
                   style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                 >
                   <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>

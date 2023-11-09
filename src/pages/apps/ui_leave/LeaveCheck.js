@@ -112,6 +112,7 @@ const LeaveCheck = ({ popperPlacement }) => {
       <Card sx={{ position: 'relative', height: 515, overflowY: 'auto' }}>
         <CardHeader
           title='Provider Leave Check'
+          
           // action={
           //   <Box sx={{ display: 'flex', alignItems: 'center' }}>
           //     <IconButton

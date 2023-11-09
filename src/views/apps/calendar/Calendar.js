@@ -598,8 +598,10 @@ const Calendar = props => {
         date: picker.map(dat => dat.format('YYYY-MM-DD')).toString(),
         providerId: userRole.userId
       })
+
       // .then(res => console.log(res, 'res from handlesuccess'))
       // .catch(err => console.log(err, 'err from handlesuccess'))
+      
       .then(res => {
         console.log(res, 'res from handlesuccess');
         toast.success('Leave applied successfully'); // Show success toast
