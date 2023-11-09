@@ -108,7 +108,6 @@ const MailLog = props => {
 
   const handleIconClick = () => {
     setIsClicked(true)
-
     //onClear()
     setTimeout(() => {
       setIsClicked(false)
@@ -117,6 +116,10 @@ const MailLog = props => {
     setTimeout(() => {
       setShowProgress(false)
     }, 1000)
+    setProviderData([])
+    setHospitalData(null)
+    setStartDate(null)
+    setEndDate(null)
   }
 
   const userRole = JSON.parse(localStorage.getItem('userData'))
@@ -614,7 +617,7 @@ const MailLog = props => {
             // height: isExpand ? '20%' : 'auto',
             height: isExpand ? '20%' : searchButtonClicked ? 'auto' : '70%',
             padding: '16px',
-            
+
             //overflowY: isExpand ? '' : 'scroll'
             overflowY: searchButtonClicked ? 'scroll' : '',
             backgroundColor: isClicked ? '#b1b3b1' : '#ffffff'
@@ -792,7 +795,6 @@ const MailLog = props => {
                             <button onClick={increaseMonth}>{'>'}</button>
                           </div>
                         )}
-
                         //minDate={today}
                         minDate={startDateModal}
                       />
@@ -816,7 +818,14 @@ const MailLog = props => {
                       <Button
                         size='small'
                         style={{ marginLeft: '15px', backgroundColor: '#82868B', color: 'white' }}
-                        onClick={handleClose}
+                        //onClick={() => {handleClose}}
+                        onClick={() => {
+                          handleClose()
+                          setProviderDataModal(null) // Clear the Provider input field
+                          setHospitalDataModal(null) // Clear the Hospital input field
+                          setStartDateModal(null) // Clear the Start Date input field
+                          setEndDateModal(null) // Clear the End Date input field
+                        }}
                       >
                         Cancel
                       </Button>
@@ -964,7 +973,6 @@ const MailLog = props => {
                 <Grid
                   container
                   rowSpacing={6}
-
                   //columnSpacing={{ xs: 3, sm: 5, md: 6 }}
                   style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                 >
