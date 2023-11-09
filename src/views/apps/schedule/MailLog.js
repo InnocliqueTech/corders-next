@@ -106,21 +106,21 @@ const MailLog = props => {
 
   const [isClicked, setIsClicked] = useState(false)
 
-  const handleIconClick = () => {
-    setIsClicked(true)
-    //onClear()
-    setTimeout(() => {
-      setIsClicked(false)
-    }, 1000)
-    setShowProgress(true)
-    setTimeout(() => {
-      setShowProgress(false)
-    }, 1000)
-    setProviderData([])
-    setHospitalData(null)
-    setStartDate(null)
-    setEndDate(null)
-  }
+  // const handleIconClick = () => {
+  //   setIsClicked(true)
+  //   //onClear()
+  //   setTimeout(() => {
+  //     setIsClicked(false)
+  //   }, 1000)
+  //   setShowProgress(true)
+  //   setTimeout(() => {
+  //     setShowProgress(false)
+  //   }, 1000)
+  //   setProviderData([])
+  //   setHospitalData(null)
+  //   setStartDate(null)
+  //   setEndDate(null)
+  // }
 
   const userRole = JSON.parse(localStorage.getItem('userData'))
 
@@ -139,19 +139,19 @@ const MailLog = props => {
   const ScheduleApi = process.env.NEXT_PUBLIC_PHYSICIAN_SCHEDULING
   const LeaveApprovalApi = process.env.NEXT_PUBLIC_LEAVE_DETAILS
 
-  const handleClick = () => {
-    setIsExpand(!isExpand)
-    if (isExpand) {
-      setShowScheduleButton(true) // Show the Schedule button when expanding
-    } else {
-      setShowScheduleButton(false) // Hide the Schedule button when collapsing
-    }
-  }
+  // const handleClick = () => {
+  //   setIsExpand(!isExpand)
+  //   if (isExpand) {
+  //     setShowScheduleButton(true) // Show the Schedule button when expanding
+  //   } else {
+  //     setShowScheduleButton(false) // Hide the Schedule button when collapsing
+  //   }
+  // }
 
-  const hideToClick = () => {
-    setHide(true)
-    setShowScheduleButton(false)
-  }
+  // const hideToClick = () => {
+  //   setHide(true)
+  //   setShowScheduleButton(false)
+  // }
 
   const handleSearchButtonClick = () => {
     setSearchButtonClicked(true)
@@ -632,7 +632,7 @@ const MailLog = props => {
               <div style={{ marginTop: '10px' }}>
                 <h5>Physician Scheduling</h5>
               </div>
-              <div style={{ display: 'flex' }}>
+              {/* <div style={{ display: 'flex' }}>
                 <div style={{ marginTop: '10px', cursor: 'pointer' }} onClick={handleClick}>
                   <Icon icon='tabler:chevron-down' fontSize={18} />
                 </div>
@@ -654,7 +654,7 @@ const MailLog = props => {
                     <CircularProgress />
                   </div>
                 )}
-              </div>
+              </div> */}
             </div>
             {showScheduleButton && (
               <div style={{ float: 'right', marginTop: '7px' }}>

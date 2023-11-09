@@ -37,8 +37,7 @@ const LeaveCheck = ({ popperPlacement }) => {
   const [picker, setPicker] = useState('')
   const [endPicker, setEndPicker] = useState('')
   const [minEndDate, setMinEndDate] = useState(null)
-  const [isEndPickerDisabled, setIsEndPickerDisabled] = useState(true);
-
+  const [isEndPickerDisabled, setIsEndPickerDisabled] = useState(true)
 
   const startDate = picker ? moment(picker).format('YYYY-MM-DD') : ''
   const endDate = endPicker ? moment(endPicker).format('YYYY-MM-DD') : ''
@@ -64,10 +63,6 @@ const LeaveCheck = ({ popperPlacement }) => {
       marginTop: '20px' // Add margin at the top of the fetched data container
     }
   }
-
-
-
-
 
   const OnlyLeavesFetch = async () => {
     setLoading(true)
@@ -103,15 +98,12 @@ const LeaveCheck = ({ popperPlacement }) => {
       )
   }
 
-  const handleStartDateChange = (date) => {
-    setPicker(date);
-    setMinEndDate(moment(date).toDate());
+  const handleStartDateChange = date => {
+    setPicker(date)
+    setMinEndDate(moment(date).toDate())
+  }
 
-  };
-
-
-  const isSearchButtonDisabled = !picker || !endPicker;
-
+  const isSearchButtonDisabled = !picker || !endPicker
 
   // height: 515,
 
@@ -120,34 +112,34 @@ const LeaveCheck = ({ popperPlacement }) => {
       <Card sx={{ position: 'relative', height: 515, overflowY: 'auto' }}>
         <CardHeader
           title='Provider Leave Check'
-          action={
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton
-                size='small'
-                aria-label='collapse'
-                sx={{ mr: 2, color: 'text.secondary' }}
-                onClick={() => setCollapsed(!collapsed)}
-              >
-                <Icon fontSize={20} icon={!collapsed ? 'tabler:chevron-down' : 'tabler:chevron-up'} />
-              </IconButton>
-              <IconButton
-                size='small'
-                aria-label='reload'
-                onClick={() => handleBackDrop()}
-                sx={{ mr: 2, color: 'text.secondary' }}
-              >
-                <Icon icon='tabler:reload' fontSize={20} />
-              </IconButton>
-              <IconButton
-                size='small'
-                aria-label='close'
-                sx={{ color: 'text.secondary' }}
-                onClick={() => setVisibility(false)}
-              >
-                <Icon icon='tabler:x' fontSize={20} />
-              </IconButton>
-            </Box>
-          }
+          // action={
+          //   <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          //     <IconButton
+          //       size='small'
+          //       aria-label='collapse'
+          //       sx={{ mr: 2, color: 'text.secondary' }}
+          //       onClick={() => setCollapsed(!collapsed)}
+          //     >
+          //       <Icon fontSize={20} icon={!collapsed ? 'tabler:chevron-down' : 'tabler:chevron-up'} />
+          //     </IconButton>
+          //     <IconButton
+          //       size='small'
+          //       aria-label='reload'
+          //       onClick={() => handleBackDrop()}
+          //       sx={{ mr: 2, color: 'text.secondary' }}
+          //     >
+          //       <Icon icon='tabler:reload' fontSize={20} />
+          //     </IconButton>
+          //     <IconButton
+          //       size='small'
+          //       aria-label='close'
+          //       sx={{ color: 'text.secondary' }}
+          //       onClick={() => setVisibility(false)}
+          //     >
+          //       <Icon icon='tabler:x' fontSize={20} />
+          //     </IconButton>
+          //   </Box>
+          // }
         />
         <Collapse in={collapsed}>
           <CardContent>
@@ -198,16 +190,21 @@ const LeaveCheck = ({ popperPlacement }) => {
                       />
                     }
                     required
-                    disabled={!picker} 
+                    disabled={!picker}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} md={3} style={{ display: 'flex', justifyContent: 'flex-end',  marginTop: '18px' }}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={3}
+                  style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '18px' }}
+                >
                   {' '}
-                 
                   <Button
                     variant='contained'
                     size='medium'
-                    sx={{ width: '150px' }} 
+                    sx={{ width: '150px' }}
                     onClick={OnlyLeavesFetch}
                     disabled={isSearchButtonDisabled}
                   >
