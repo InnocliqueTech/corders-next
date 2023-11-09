@@ -84,11 +84,12 @@ const AuthProvider = ({ children }) => {
   }, [])
 
   const handleLogin = (params, errorCallback) => {
-    const accessToken = JSON.parse(localStorage.getItem('userCognito')).accessToken.jwtToken
-    const refreshToken = JSON.parse(localStorage.getItem('userCognito')).refreshToken.token
+    
     axios
       .post(authConfig.loginEndpoint, params)
       .then(async response => {
+        const accessToken = JSON.parse(localStorage.getItem('userCognito')).accessToken.jwtToken
+        const refreshToken = JSON.parse(localStorage.getItem('userCognito')).refreshToken.token
         window.localStorage.setItem(authConfig.onTokenExpiration, refreshToken)
 
         params.rememberMe
