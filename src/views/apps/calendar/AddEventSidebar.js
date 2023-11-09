@@ -479,7 +479,7 @@ const AddEventSidebar = props => {
       updateEventInCalendar(eventToUpdate, propsToUpdate, extendedPropsToUpdate)
       handleAddEventSidebarToggle()
       ScheduleFetch()
-      toast.success('Event Updated')
+      // toast.success('Event Updated')
     } else {
       setError('title', {
         type: 'manual'

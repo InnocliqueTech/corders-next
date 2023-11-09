@@ -127,6 +127,7 @@ const Calendar = props => {
     loading: true
   })
   const [openResultDialog, setOpenResultDialog] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [resultDialogText, setResultDialogText] = useState('')
   const [leaveDialogOpen, setLeaveDialogOPen] = useState(false)
   const [selectedDate, setSelectedDate] = useState('')
@@ -589,32 +590,6 @@ const Calendar = props => {
       })
   }
 
-  // Leave Apply
-  // const handleSuccess = () => {
-  //   axios.post(LeaveStatusCheck, {
-  //     requestType: 'LeaveApply',
-  //     isHalfday: halfDay,
-  //     date: picker.map(dat => dat.format('YYYY-MM-DD')).toString(),
-  //     providerId: userRole.userId
-  //   })
-  //   return MySwal.fire({
-  //     title: 'Are you Sure ?',
-  //     text: 'You want to take leave!',
-  //     icon: 'info',
-  //     confirmButtonText: 'Confirm',
-  //     showCancelButton: true,
-  //     customClass: {
-  //       confirmButton: 'btn btn-primary',
-  //       cancelButton: 'btn btn-outline-danger ms-1'
-  //     },
-  //     buttonsStyling: false
-  //   }).then(function (result) {
-  //     if (result.value) {
-  //       setFormModal(!formModal)
-  //     }
-  //   })
-  // }
-
   const handleSuccess = () => {
     axios
       .post(LeaveStatusCheck, {
@@ -623,18 +598,18 @@ const Calendar = props => {
         date: picker.map(dat => dat.format('YYYY-MM-DD')).toString(),
         providerId: userRole.userId
       })
-      
       // .then(res => console.log(res, 'res from handlesuccess'))
       // .catch(err => console.log(err, 'err from handlesuccess'))
-
       .then(res => {
-        console.log(res, 'res from handlesuccess')
-        toast.success('Leave applied successfully') // Show success toast
+        console.log(res, 'res from handlesuccess');
+        toast.success('Leave applied successfully'); // Show success toast
+        setPicker([])
       })
       .catch(err => {
-        console.error(err, 'err from handlesuccess')
-        toast.error('Something went wrong while applying the leave') // Show error toast
-      })
+        console.error(err, 'err from handlesuccess');
+        toast.error('Something went wrong while applying the leave'); // Show error toast
+      });
+
 
     //added here
     setTimeout(() => {
@@ -646,24 +621,33 @@ const Calendar = props => {
   }
 
   const fetchLeaveDetails = async () => {
+    setLoading(true);
+    const currentDate = new Date().toISOString().split('T')[0];
+   
     await axios
       .post(LeaveStatusCheck, {
         requestType: 'FetchLeaveDetails',
         providerId: userRole.userId
       })
       .then(res => {
+        console.log(res, 'res for leaves')
         const data = []
         res.data.fetchLeaveResponse.fetchLeaveDetails.map(dat => {
           if (dat.status === 0) {
-            data.push(dat.dates)
+            //data.push(dat.dates)
+            if (dat.dates >= currentDate) {
+              data.push(dat.dates)
+            }
           }
-          setLeaves(data)
+
         })
+        console.log(data, 'from current dates')
+        setLeaves(data)
       })
   }
   useEffect(() => {
     fetchLeaveDetails()
-  }, [])
+  }, [active])
 
   const removeLeave = data => {
     // Set the z-index for .swal2-container
@@ -1082,7 +1066,7 @@ const Calendar = props => {
                     </div>
                   </Box>
                 )}
-                {active === '2' && (
+               {active === '2' && (
                   <Box>
                     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                       {leaves &&
@@ -1126,7 +1110,8 @@ const Calendar = props => {
                       Close
                     </Button>
                   </Box>
-                )}
+                )
+                }
               </DialogContent>
               <div>
                 <Modal
