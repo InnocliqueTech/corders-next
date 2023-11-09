@@ -440,7 +440,6 @@ const MailLog = props => {
       setLoading(false)
       SearchFetch()
       OnlyLeavesFetch()
-      //toast.success('Leave approved successfully..!') // Show success toast
     } catch (err) {
       setLoading(false)
       console.error(err)
@@ -1335,6 +1334,7 @@ const MailLog = props => {
               size='medium'
               onClick={() => {
                 LeaveApprovalFetch(2), setLeaveDeniedModal(!leaveDeniedModal)
+
                 // Display the toast message
                 toast.error('Leave Denied successfully ..!', {
                   position: 'top-right'

@@ -944,7 +944,6 @@ const Calendar = props => {
         alignContent:"center",
         boxSizing: "border-box",
         fontSize:"15px"
-        // margin:"20px",
        
       }}
       />
@@ -965,16 +964,11 @@ const Calendar = props => {
               aria-labelledby='modal-title'
               aria-describedby='modal-description'
 
-              // fullWidth
               maxWidth="sm"
-            // maxHeight="md"
             >
               <div style={{ width: '550px', height:"350px" }}>
               <DialogTitle>
-                {/* <Tabs value={active} onChange={(_, newValue) => setActive(newValue)} centered>
-                  <Tab label='Apply Leave' value='1' />
-                  <Tab label='Cancel Leave' value='2' />
-                </Tabs> */}
+           
                 <div style={{ display: "flex", justifyContent: "center", gap: "5px" }}>
                   <Button
                     variant={active === '1' ? 'contained' : 'text'}
@@ -1007,22 +1001,13 @@ const Calendar = props => {
                           multiple
                           format='YYYY-MM-DD'
                           minDate={new Date()}
-                          //calendarPosition='top-center'
                           calendarPosition='top-center'
                           ref={datePickerRef}
                           shouldCloseOnSelect={() => datePickerRef.current.closeCalendar()}
-                          //style={{ width: '500px', height: '40px', }}
-                          // style={{
-                          //   width: '500px',
-                          //   height: isCalendarOpen ? 'auto' : '40px',
-                            
-                          //   position: isCalendarOpen ? 'relative' : 'static',
-                          //   zIndex: isCalendarOpen ? 9999 : 'auto',
-                          // }}
+                        
                           style={{
                             width: "500px",
-                            height: "300px", // Set a fixed height that suits your content
-                            // Other styles...
+                            height: "300px", 
                           }}
                         
                           placeholder='Select Date'
