@@ -181,15 +181,30 @@ const Calendar = props => {
   }, [])
 
   const handleClick = info => {
-    if (userRole.userValidation.rolesList.map(dat => dat.roleName).includes('Admin')) {
-      const ev = { ...blankEvent }
-      ev.start = info.date
-      ev.end = info.date
-      ev.allDay = true
+    if (userRole.userValidation.rolesList.map((dat) => dat.roleName).includes('Admin')) {
+      if (
+        new Date(info.date) > new Date() ||
+        new Date(info.date).getDate() === new Date().getDate()
+      ) {
+        const ev = { ...blankEvent }
+        ev.start = info.date
+        ev.end = info.date
+        ev.allDay = true
 
-      // @ts-ignore
-      dispatch(selectEvent(ev))
-      handleAddEventSidebarToggle()
+        // @ts-ignore
+        dispatch(selectEvent(ev))
+        handleAddEventSidebarToggle()
+      }  else {
+        return MySwal.fire({
+          title: `Not Accessible`,
+          text: `Date before current date is not been Changed`,
+          icon: 'info',
+          customClass: {
+            confirmButton: 'btn btn-success'
+          },
+          buttonsStyling: false
+        })
+      }
     }
   }
 
@@ -325,7 +340,7 @@ const Calendar = props => {
     dragScroll: true,
     dayMaxEvents: 6,
     navLinks: true,
-    height: 1100,
+    height: 1495,
     eventClassNames({ event: calendarEvent }) {
       // @ts-ignore
       const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar]
