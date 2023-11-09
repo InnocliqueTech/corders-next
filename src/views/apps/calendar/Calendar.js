@@ -926,7 +926,29 @@ const Calendar = props => {
     setActive(value);
   };
   const monthNameAndYear = getCurrentMonthNameAndYear()
-
+  function CustomMultipleInput({onFocus, value}) {
+    return (
+      <input
+      id="datePickerInput"
+        onFocus={onFocus}
+        value={value}
+        placeholder='Select Date'
+        readOnly
+        style={{ display: "block",
+        marginTop:"20px",
+        marginBottom:"15px",           
+         width: "480px",
+          border: "1px solid gray",
+          height: "40px",
+          color: "black",
+        alignContent:"center",
+        boxSizing: "border-box",
+        fontSize:"15px"
+       
+      }}
+      />
+    )
+  }
   if (store) {
     return (
       <>
@@ -942,32 +964,30 @@ const Calendar = props => {
               aria-labelledby='modal-title'
               aria-describedby='modal-description'
 
-              // fullWidth
-              // maxWidth="sm"
+              maxWidth="sm"
             >
+              <div style={{ width: '550px', height:"350px" }}>
               <DialogTitle>
-                {/* <Tabs value={active} onChange={(_, newValue) => setActive(newValue)} centered>
-                  <Tab label='Apply Leave' value='1' />
-                  <Tab label='Cancel Leave' value='2' />
-                </Tabs> */}
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
+           
+                <div style={{ display: "flex", justifyContent: "center", gap: "5px" }}>
                   <Button
                     variant={active === '1' ? 'contained' : 'text'}
-                    color='primary'
+                    color="primary"
                     onClick={() => handleButtonClick('1')}
                     style={{ color: active === '1' ? 'white' : 'gray' }}
+
                   >
                     Apply Leave
                   </Button>
                   <Button
                     variant={active === '2' ? 'contained' : 'text'}
-                    color='primary'
+                    color="primary"
                     onClick={() => handleButtonClick('2')}
                     style={{ color: active === '2' ? 'white' : 'gray' }}
+
                   >
                     Cancel Leave
                   </Button>
-                  {/* Your content for the active tab goes here */}
                 </div>
               </DialogTitle>
               <DialogContent>
@@ -984,24 +1004,34 @@ const Calendar = props => {
                           calendarPosition='top-center'
                           ref={datePickerRef}
                           shouldCloseOnSelect={() => datePickerRef.current.closeCalendar()}
-                          style={{ width: '500px', height: '40px' }}
+                        
+                          style={{
+                            width: "500px",
+                            height: "300px", 
+                          }}
+                        
                           placeholder='Select Date'
+                          render={<CustomMultipleInput 
+                          />}
                         >
                           <div
                             type='button'
                             className='rounded-circle mb-1 border-danger'
                             onClick={() => datePickerRef.current.closeCalendar()}
                             size={18}
+                            style={{ cursor: "pointer" }}
                           >
                             Close
                           </div>
                         </DatePicker>
                       </Grid>
                       <Grid item sm={12}>
+                        {/* <FormControlLabel
+                          control={<Switch checked={halfDay} onChange={onChange} name='customSwitch' color='primary' />}
+                          label='Half Day'
+                        /> */}
                         <FormControlLabel
-                          control={
-                            <Switch checked={halfDay === 1} onChange={onChange} name='customSwitch' color='primary' />
-                          }
+                          control={<Switch checked={halfDay === 1} onChange={onChange} name='customSwitch' color='primary' />}
                           label='Half Day'
                         />
                       </Grid>
@@ -1010,6 +1040,7 @@ const Calendar = props => {
                     <Typography variant='h6' gutterBottom mt={2}>
                       Selected Dates
                     </Typography>
+                    
                     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                       {picker.map((date, index) => (
                         <div key={date} style={{ flexBasis: '50%', padding: '8px', boxSizing: 'border-box' }}>
@@ -1041,7 +1072,9 @@ const Calendar = props => {
                         </div>
                       ))}
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', paddingTop: '16px' }}>
+
+                    {/* <hr className='container-fluid' style={{width:"100%", backgroundColor:"1px solid #b6dbe1", height:"1px", marginTop:"10px"}}/> */}
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', paddingTop: '20px' }}>
                       <ChildModal />
                       <Button variant='contained' color='primary' onClick={() => setFormModal(!formModal)}>
                         Close
@@ -1146,6 +1179,7 @@ const Calendar = props => {
                     </div>
                   </div>
                 </Modal>
+              </div>
               </div>
             </Dialog>
             <button className='btn btn-primary mr-2' style={BtnStyle()} onClick={handleOpenMetricsModal}>

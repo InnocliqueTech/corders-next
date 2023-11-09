@@ -37,6 +37,8 @@ const LeaveCheck = ({ popperPlacement }) => {
   const [picker, setPicker] = useState('')
   const [endPicker, setEndPicker] = useState('')
   const [minEndDate, setMinEndDate] = useState(null)
+  const [isEndPickerDisabled, setIsEndPickerDisabled] = useState(true);
+
 
   const startDate = picker ? moment(picker).format('YYYY-MM-DD') : ''
   const endDate = endPicker ? moment(endPicker).format('YYYY-MM-DD') : ''
@@ -62,6 +64,10 @@ const LeaveCheck = ({ popperPlacement }) => {
       marginTop: '20px' // Add margin at the top of the fetched data container
     }
   }
+
+
+
+
 
   const OnlyLeavesFetch = async () => {
     setLoading(true)
@@ -96,6 +102,16 @@ const LeaveCheck = ({ popperPlacement }) => {
         </span>
       )
   }
+
+  const handleStartDateChange = (date) => {
+    setPicker(date);
+    setMinEndDate(moment(date).toDate());
+
+  };
+
+
+  const isSearchButtonDisabled = !picker || !endPicker;
+
 
   // height: 515,
 
@@ -148,10 +164,7 @@ const LeaveCheck = ({ popperPlacement }) => {
                     id='basic-input'
                     style={{ width: '100%' }}
                     placeholderText='Select Start Date'
-                    onChange={date => {
-                      setPicker(date)
-                      setMinEndDate(moment(date).toDate()) // Set minimum end date
-                    }}
+                    onChange={handleStartDateChange}
                     customInput={
                       <CustomInput
                         label='Start Date'
@@ -185,12 +198,19 @@ const LeaveCheck = ({ popperPlacement }) => {
                       />
                     }
                     required
+                    disabled={!picker} 
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Grid item xs={12} sm={6} md={3} style={{ display: 'flex', justifyContent: 'flex-end',  marginTop: '18px' }}>
                   {' '}
-                  {/* Button aligned to the right */}
-                  <Button variant='contained' size='medium' onClick={OnlyLeavesFetch}>
+                 
+                  <Button
+                    variant='contained'
+                    size='medium'
+                    sx={{ width: '150px' }} 
+                    onClick={OnlyLeavesFetch}
+                    disabled={isSearchButtonDisabled}
+                  >
                     Search
                   </Button>
                 </Grid>
